@@ -17,11 +17,12 @@
     Column,
   } from "carbon-components-svelte";
 
-  let isSideNavOpen = true;
+  let isSideNavOpen = false;
   let links = [
-    { text: "Domains", href: "/domains" },
-    { text: "Account", href: "/account" },
-    { text: "Billing", href: "/billing" },
+    { text: "Domains", href: "/dashboard/domains" },
+    { text: "Images & Files", href: "/dashboard/files" },
+    { text: "Account", href: "/dashboard/account" },
+    { text: "Billing", href: "/dashboard/billing" },
   ];
 </script>
 
@@ -30,9 +31,9 @@
 </svelte:head>
 
 <Header
-  persistentHamburgerMenu={true}
   company="AppMasker"
   platformName=""
+  persistentHamburgerMenu={true}
   bind:isSideNavOpen
 >
   <div slot="skip-to-content">
@@ -63,7 +64,19 @@
 <Content>
   <Grid>
     <Row>
-      <Column />
+      <Column>
+        <slot />
+      </Column>
     </Row>
   </Grid>
 </Content>
+
+<style>
+  :global(.block) {
+    margin-top: 3em;
+  }
+
+  :global(.bx--side-nav ~ .bx--content) {
+    margin-left: 0;
+  }
+</style>

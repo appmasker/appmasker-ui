@@ -63,18 +63,18 @@ brace-expansion@^1.1.7:
     balanced-match "^1.0.0"
     concat-map "0.0.1"
 
-carbon-components-svelte@^0.41.0:
-  version "0.41.0"
-  resolved "https://registry.yarnpkg.com/carbon-components-svelte/-/carbon-components-svelte-0.41.0.tgz#55e19b4623ececcc88bd6a7c0c3b78a2b727a9fe"
-  integrity sha512-cfj3Vla2ovR5ed2kO1qEYEm5D46I9o4GmFJkPO7A4800w8qY3ETGDpL1d6R9gGhGStmqYPHza/uvUjxN9pcczA==
+carbon-components-svelte@^0.44.4:
+  version "0.44.4"
+  resolved "https://registry.yarnpkg.com/carbon-components-svelte/-/carbon-components-svelte-0.44.4.tgz#5b9bec1fee918c27f5716457f2ed5d88f678a203"
+  integrity sha512-+cmZKMb1YClR4+T03H9hRrMQpatvMlvdsvq68TLqD+plUW/3QInm1dLRd69jnDNzvmD6zJBuhiNQXqnwU24HyA==
   dependencies:
-    carbon-icons-svelte "^10.27.0"
+    carbon-icons-svelte "^10.36.0"
     flatpickr "4.6.9"
 
-carbon-icons-svelte@^10.27.0:
-  version "10.35.0"
-  resolved "https://registry.yarnpkg.com/carbon-icons-svelte/-/carbon-icons-svelte-10.35.0.tgz#b154243902b3ca26c563e4d2ebcfceb8cc03be34"
-  integrity sha512-GGh6tCWOUL7UjObSECpLfQ83k2xKfJRJTy6uy4v/R1BKj/Nk3bPc1vNyEwygHYI0JjPRNMbPCc53qisBPb1JGA==
+carbon-icons-svelte@^10.36.0:
+  version "10.38.0"
+  resolved "https://registry.yarnpkg.com/carbon-icons-svelte/-/carbon-icons-svelte-10.38.0.tgz#daf74e4a2a826ad994c950a67307b8392d80ca3a"
+  integrity sha512-uEckbbNHFtDzKz+QRx6GxvZcezXXqfDOiaE7mupkiRPkBbALrA9CPJZbI5Q2XW5mpn8lgN3IlTm2u1iJEAlVJw==
 
 carbon-preprocess-svelte@^0.6.0:
   version "0.6.0"

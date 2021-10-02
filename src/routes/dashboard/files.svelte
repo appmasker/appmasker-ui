@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import Domains from "./domains.svelte";
 </script>
 

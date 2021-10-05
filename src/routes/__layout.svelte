@@ -1,82 +1,69 @@
 <script lang="ts">
-  import "carbon-components-svelte/css/g10.css";
-  import {
-    Header,
-    HeaderNav,
-    HeaderNavItem,
-    HeaderNavMenu,
-    SideNav,
-    SideNavItems,
-    SideNavMenu,
-    SideNavMenuItem,
-    SideNavLink,
-    SkipToContent,
-    Content,
-    Grid,
-    Row,
-    Column,
-  } from "carbon-components-svelte";
+	import {
+		Column,
+		Content,
+		Grid,
+		Header,
+		HeaderNav,
+		HeaderNavItem,
+		Row,
+		SideNav,
+		SideNavItems,
+		SideNavLink,
+		SkipToContent
+	} from 'carbon-components-svelte';
+	import 'carbon-components-svelte/css/g10.css';
 
-  let isSideNavOpen = false;
-  let links = [
-    { text: "Domains", href: "/dashboard/domains" },
-    { text: "Images & Files", href: "/dashboard/files" },
-    { text: "Account", href: "/dashboard/account" },
-    { text: "Billing", href: "/dashboard/billing" },
-  ];
+	let isSideNavOpen = false;
+	let links = [
+		{ text: 'Domains', href: '/dashboard/domains' },
+		{ text: 'Account', href: '/dashboard/account' },
+		{ text: 'Billing', href: '/dashboard/billing' }
+	];
 </script>
 
 <svelte:head>
-  <title>AppMasker</title>
+	<title>AppMasker</title>
 </svelte:head>
 
 <Header
-  company="AppMasker"
-  platformName=""
-  persistentHamburgerMenu={true}
-  bind:isSideNavOpen
+	company="AppMasker"
+	platformName=""
+	persistentHamburgerMenu={false}
+	expandedByDefault={false}
+	bind:isSideNavOpen
 >
-  <div slot="skip-to-content">
-    <SkipToContent />
-  </div>
+	<div slot="skip-to-content">
+		<SkipToContent />
+	</div>
 
-  <HeaderNav>
-    {#each links as link}
-      <HeaderNavItem href={link.href} text={link.text} />
-    {/each}
-    <!-- <HeaderNavMenu text="Menu">
+	<HeaderNav>
+		{#each links as link}
+			<HeaderNavItem href={link.href} text={link.text} />
+		{/each}
+		<!-- <HeaderNavMenu text="Menu">
       <HeaderNavItem href="/" text="Link 1" />
     </HeaderNavMenu> -->
-  </HeaderNav>
+	</HeaderNav>
 </Header>
 
 <SideNav bind:isOpen={isSideNavOpen}>
-  <SideNavItems>
-    {#each links as link}
-      <SideNavLink href={link.href} text={link.text} />
-    {/each}
-    <!-- <SideNavMenu text="Menu">
+	<SideNavItems>
+		{#each links as link}
+			<SideNavLink href={link.href} text={link.text} />
+		{/each}
+		<!-- <SideNavMenu text="Menu">
       <SideNavMenuItem href="/" text="Link 1" />
     </SideNavMenu> -->
-  </SideNavItems>
+	</SideNavItems>
 </SideNav>
 
 <Content>
-  <Grid>
-    <Row>
-      <Column>
-        <slot />
-      </Column>
-    </Row>
-  </Grid>
+	<Grid>
+		<Row>
+			<Column>
+				<slot />
+			</Column>
+		</Row>
+	</Grid>
 </Content>
-
-<style>
-  :global(.block) {
-    margin-top: 3em;
-  }
-
-  :global(.bx--side-nav ~ .bx--content) {
-    margin-left: 0;
-  }
-</style>

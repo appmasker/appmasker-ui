@@ -7,9 +7,9 @@ const config = {
   preprocess: [preprocess(), optimizeImports() ],
   kit: {
     target: "#svelte",
-    adapter: adapter({
-      fallback: '200.html'
-    })
+    // adapter: adapter({
+    //   fallback: '200.html'
+    // }),
   },
 };
 

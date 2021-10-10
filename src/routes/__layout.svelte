@@ -1,4 +1,6 @@
-<script lang="ts">
+<script lang="ts" context="module">
+	import { session } from '$app/stores';
+	import type { LoadInput, LoadOutput } from '@sveltejs/kit';
 	import {
 		Column,
 		Content,
@@ -13,11 +15,21 @@
 		SkipToContent
 	} from 'carbon-components-svelte';
 	import 'carbon-components-svelte/css/g10.css';
+	import { authGuard } from '../services/guards';
+	import type { AppSession } from '../types';
 
+	export async function load(params: LoadInput): Promise<LoadOutput> {
+		console.log('in load. session:', params, params.session as AppSession);
+		const session: AppSession = params.session;
+		return await authGuard(params.page.path, session.isAuthenticated);
+	}
+</script>
+
+<script lang="ts">
 	let isSideNavOpen = false;
 	let links = [
 		{ text: 'Domains', href: '/dashboard/domains' },
-		{ text: 'Account', href: '/dashboard/account' },
+		// { text: 'Account', href: '/dashboard/account' },
 		{ text: 'Billing', href: '/dashboard/billing' }
 	];
 </script>
@@ -36,7 +48,6 @@
 	<div slot="skip-to-content">
 		<SkipToContent />
 	</div>
-
 	<HeaderNav>
 		{#each links as link}
 			<HeaderNavItem href={link.href} text={link.text} />
@@ -46,17 +57,18 @@
     </HeaderNavMenu> -->
 	</HeaderNav>
 </Header>
-
-<SideNav bind:isOpen={isSideNavOpen}>
-	<SideNavItems>
-		{#each links as link}
-			<SideNavLink href={link.href} text={link.text} />
-		{/each}
-		<!-- <SideNavMenu text="Menu">
+{#if $session.isAuthenticated}
+	<SideNav bind:isOpen={isSideNavOpen}>
+		<SideNavItems>
+			{#each links as link}
+				<SideNavLink href={link.href} on:click={() => (isSideNavOpen = false)} text={link.text} />
+			{/each}
+			<!-- <SideNavMenu text="Menu">
       <SideNavMenuItem href="/" text="Link 1" />
     </SideNavMenu> -->
-	</SideNavItems>
-</SideNav>
+		</SideNavItems>
+	</SideNav>
+{/if}
 
 <Content>
 	<Grid>

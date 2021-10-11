@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { Link, Modal, TextArea } from 'carbon-components-svelte';
+	import { jsonPlaceholder } from '../../utils/consts';
 	import { createEventDispatcher } from 'svelte';
 	import { DomainConfig, toDomainForm } from '../../types';
 
@@ -38,7 +39,7 @@
 >
 	<TextArea
 		labelText="Data that relates to your tenant that owns this domain. Edit this by selecting the row from the table and clicking 'Edit'."
-		placeholder="Valid JSON only!"
+		placeholder={jsonPlaceholder}
 		readonly
 		rows={15}
 		bind:value={selectedDomainConfig}

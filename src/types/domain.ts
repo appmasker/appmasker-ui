@@ -19,6 +19,7 @@ export interface DomainConfig {
 }
 
 export interface DomainConfigInput {
+	id?: string;
 	name: string;
 	ipAddresses: string[];
 	data?: { [key: string]: any };

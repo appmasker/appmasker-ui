@@ -6,8 +6,11 @@
 	import { BACKEND_HOST, BUSINESS_STANDARD_PRICE_ID } from '../../utils/environment';
 	import { isSubscribed } from '../../utils/billing';
 	import CheckmarkFilled16 from 'carbon-icons-svelte/lib/CheckmarkFilled16';
+	import { onMount } from 'svelte';
 
-	getCurrentUser.dispatch();
+	onMount(() => {
+		getCurrentUser.dispatch();
+	});
 </script>
 
 <h1>Billing</h1>
@@ -15,7 +18,7 @@
 <div class="block">
 	<Tile>
 		<h3>Free Trial</h3>
-		<ul>
+		<ul class="block">
 			<li>Create 2 domains to try out AppMasker</li>
 			<li>No Credit Card required</li>
 		</ul>
@@ -24,10 +27,10 @@
 <div class="block">
 	<Tile>
 		<h3>Business - $50/mo</h3>
-		<ul>
+		<ul class="block">
 			<li>Includes 10 domains</li>
+			<li>Additional domains at $3 / domain per month</li>
 			<li>Refunds and deleted domains will be prorated</li>
-			<li>Additional domains at $3 / domain</li>
 			<li>All charges are made annually</li>
 		</ul>
 

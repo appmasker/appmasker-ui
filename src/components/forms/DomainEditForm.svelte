@@ -4,8 +4,10 @@
 	import TrashCan16 from 'carbon-icons-svelte/lib/TrashCan16';
 	import { createEventDispatcher } from 'svelte';
 	import { IDomainForm, Redirect } from '../../types';
+	import { jsonPlaceholder } from '../../utils/consts';
 
 	export let data = {} as IDomainForm;
+	export let isEdit = false;
 	const dispatch = createEventDispatcher();
 
 	function onSubmit(): void {
@@ -25,6 +27,7 @@
 	<div class="block">
 		<TextInput
 			bind:value={data.name}
+			disabled={isEdit}
 			labelText="Domain name"
 			placeholder="example.com or tenant.yoursite.com"
 			helperText="Enter a root domain or subdomain that your tenant will use to access your service"
@@ -44,7 +47,7 @@
 			bind:value={data.data}
 			rows={10}
 			labelText="Tenant Data"
-			placeholder="Valid JSON object only!"
+			placeholder={jsonPlaceholder}
 			helperText="Generally the structure of this object will be consistent with all your tenants but the values should vary."
 		/>
 	</div>

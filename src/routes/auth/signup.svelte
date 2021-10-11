@@ -46,12 +46,6 @@
 </div>
 
 <style>
-	.actions-row {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-	}
-
 	.auth-container {
 		margin: 2em auto;
 		max-width: 400px;

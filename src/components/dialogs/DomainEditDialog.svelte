@@ -38,7 +38,7 @@
 			<h4 class="block data-header">{dataInput.name}</h4>
 		{/if}
 		{#if isOpen}
-			<DomainEditForm data={dataInput} />
+			<DomainEditForm {isEdit} data={dataInput} />
 		{/if}
 	{/each}
 </Modal>

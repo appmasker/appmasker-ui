@@ -1,6 +1,4 @@
-import { goto } from '$app/navigation';
-import type { LoadInput, LoadOutput } from '@sveltejs/kit';
-import type { AppSession, User } from 'src/types';
+import type { LoadOutput } from '@sveltejs/kit';
 
 export async function authGuard(url: string, isAuthenticated: boolean): Promise<LoadOutput> {
 	console.log('current session', isAuthenticated);

@@ -26,17 +26,23 @@
 </script>
 
 <script lang="ts">
+	import NotificationPopup from '../components/NotificationPopup.svelte';
+
 	let isSideNavOpen = false;
 	let links = [
 		{ text: 'Domains', href: '/dashboard/domains' },
 		// { text: 'Account', href: '/dashboard/account' },
-		{ text: 'Billing', href: '/dashboard/billing' }
+		{ text: 'API', href: '/dashboard/api' },
+		{ text: 'Billing', href: '/dashboard/billing' },
+		{ text: 'Help', href: '/dashboard/help' }
 	];
 </script>
 
 <svelte:head>
 	<title>AppMasker</title>
 </svelte:head>
+
+<NotificationPopup />
 
 <Header
 	company="AppMasker"

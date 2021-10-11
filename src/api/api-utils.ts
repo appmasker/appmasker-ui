@@ -22,10 +22,10 @@ export const backendCall = <Entity, Body = void>(
 		headers: {
 			'Content-Type': 'application/json'
 		}
-	})
-		.then((resp) => resp.json())
-		.catch((reason) => {
-			console.log('reson next');
-			console.log(reason);
-			return reason;
-		});
+	}).then(async (resp) => {
+		const data = await resp.json();
+		if (resp.ok) {
+			return data;
+		}
+		throw new Error(data?.['message']);
+	});

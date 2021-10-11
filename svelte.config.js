@@ -10,6 +10,7 @@ const config = {
     // adapter: adapter({
     //   fallback: '200.html'
     // }),
+    ssr: false
   },
 };
 

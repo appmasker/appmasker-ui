@@ -18,7 +18,10 @@
 				goto('/');
 			})
 			.catch((err) => {
-				showNotification$.set({ message: err.message, title: 'Login Failed' });
+				showNotification$.set({
+					message: err?.message || 'Make sure your credentials are correct',
+					title: 'Login Failed'
+				});
 			});
 	}
 </script>

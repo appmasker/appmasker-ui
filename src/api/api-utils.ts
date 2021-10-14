@@ -23,12 +23,12 @@ export const backendCall = <Entity, Body = void>(
 			'Content-Type': 'application/json'
 		}
 	}).then(async (resp) => {
-		const data = await resp.json();
+		const data = (await resp?.json()) || {};
 		if (resp.status === 401 && !location.href.includes('/auth')) {
 			return goto('/auth');
 		}
 		if (resp.ok) {
 			return data;
 		}
-		throw new Error(data?.['message']);
+		throw new Error(data?.['message'] || 'An error occurred');
 	});

@@ -1,0 +1,36 @@
+.block {
+  margin-top: 2em;
+  margin-bottom: 1em;
+}
+
+	.actions-row {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+	}
+
+
+/* overrides */
+body {
+  font-size: 16px;
+}
+b {
+  font-weight: bold !important;
+}
+
+ul {
+  list-style: initial !important;
+}
+
+ul, li {
+  margin-left: 1rem !important;
+  line-height: 1.2rem !important;
+  font-size: initial !important;
+}
+.bx--side-nav~.bx--content {
+  margin-left: 0 !important;
+}
+
+.bx--modal-container .bx--modal-header, .bx--modal-container .bx--modal-content, .bx--modal-container .bx--modal-content__regular-content  {
+  padding-right: 1em !important;
+}

@@ -1,0 +1,1 @@
+import{b as s}from"./api-utils-e88dc490.js";import{e,g as a}from"./store-utils-3fdd23c5.js";import{c as t,s as r}from"./user.state-7cf1189d.js";const o=e(t,(()=>s("/user/self"))),c=e(a,(e=>s("/api-key","POST",e)),((s,e)=>{r.set({message:s.message,title:e?"Success!":"Failed to create API Key",kind:e?"success":"error"})}));export{c as a,o as g};

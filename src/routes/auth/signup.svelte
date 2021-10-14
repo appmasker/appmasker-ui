@@ -2,6 +2,7 @@
 	import { goto } from '$app/navigation';
 
 	import { Button, Form, Link, PasswordInput, TextInput, Tile } from 'carbon-components-svelte';
+	import { showNotification$ } from '../../store';
 	import { backendCall } from '../../api';
 	import type { User } from '../../types';
 
@@ -13,10 +14,13 @@
 		backendCall<User, { email: string; password: string }>('/auth/signup', 'POST', {
 			email,
 			password
-		}).then((result) => {
-			console.log('updating session with', result);
-			goto('/');
-		});
+		})
+			.then((result) => {
+				goto('/');
+			})
+			.catch((err) => {
+				showNotification$.set({ message: err.message, title: 'Registration Failed' });
+			});
 	}
 </script>
 

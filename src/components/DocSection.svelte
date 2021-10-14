@@ -4,6 +4,7 @@
 
 	export let config: DocConfig;
 	export let headers = [];
+	$: responseHeaders = headers.filter((h) => h.key !== 'required');
 </script>
 
 <Tile>
@@ -43,10 +44,7 @@
 				<div class="block">
 					<h5>Data Type: {config.responseType}</h5>
 					{#if !config.hideTable}
-						<DataTable
-							headers={headers.filter((h) => h.key !== 'required')}
-							rows={config.responseRows}
-						/>
+						<DataTable headers={responseHeaders} rows={config.responseRows} />
 					{/if}
 				</div>
 				<div class="block">

@@ -19,7 +19,6 @@ export const effectManager = <Entity, Payload = void>(
 			effect(payload)
 				.then((result) => {
 					store.set({ data: result?.data, isLoading: false });
-					console.log('effect:', result);
 					afterEffect?.(result, true);
 					return result;
 				})

@@ -18,7 +18,6 @@
 	function closeModal(data, doSubmit) {
 		modalIsOpen = false;
 		if (doSubmit) {
-			console.log(data);
 			dispatch('submit', {
 				config: JSON.parse(data)
 			});

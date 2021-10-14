@@ -40,10 +40,6 @@
 	let confirmDeleteOpened = false;
 	let confirmDeleteCheck = false;
 
-	function submitConfigChange(data) {
-		console.log('final submit now', data);
-	}
-
 	function toggleRow(id: string): void {
 		if (expandedRowIds.includes(id)) {
 			expandedRowIds = expandedRowIds.filter((rowId) => rowId !== id);
@@ -59,8 +55,6 @@
 			? rows.filter((row) => selectedRowIds.includes(row.id))
 			: ([{}] as DomainConfig[]);
 		domainModalOpen = true;
-
-		console.log(domainModalIsEdit, domainModalData, domainModalOpen);
 	}
 
 	function formatRedirect(redir: Redirect): string {
@@ -73,12 +67,7 @@
 	function onDialogSubmit(event: { detail: { data: DomainConfigInput[] } }): void {
 		if (domainModalIsEdit) {
 			const submission = event.detail.data;
-			editDomains.dispatch(
-				submission.map((d) => {
-					const { id, ...rest } = d;
-					return rest;
-				})
-			);
+			editDomains.dispatch(submission);
 		} else {
 			const submission = event.detail.data[0];
 			createDomain.dispatch(submission);
@@ -138,7 +127,7 @@
 			<span>
 				{#if cell.key === 'data'}
 					{#if row.redirects.length}
-						<ConfigDialog data={row} on:submit={submitConfigChange} />
+						<ConfigDialog data={row} />
 					{:else}
 						None
 					{/if}

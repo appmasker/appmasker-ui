@@ -1,11 +1,9 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-
-	import { session } from '$app/stores';
-
 	import { Button, Form, Link, PasswordInput, TextInput, Tile } from 'carbon-components-svelte';
+	import { showNotification$ } from '../../store';
 	import { backendCall } from '../../api';
-	import type { AppSession, User } from '../../types';
+	import type { User } from '../../types';
 
 	let email: string;
 	let password: string;
@@ -15,10 +13,13 @@
 		backendCall<User, { email: string; password: string }>('/auth/login', 'POST', {
 			email,
 			password
-		}).then((result) => {
-			console.log('updating session with', result);
-			goto('/');
-		});
+		})
+			.then((result) => {
+				goto('/');
+			})
+			.catch((err) => {
+				showNotification$.set({ message: err.message, title: 'Login Failed' });
+			});
 	}
 </script>
 

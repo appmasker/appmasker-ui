@@ -1,5 +1,5 @@
+import { goto } from '$app/navigation';
 import { BACKEND_HOST } from '../utils/environment';
-import * as cookie from 'cookie';
 
 const host = BACKEND_HOST;
 
@@ -24,6 +24,9 @@ export const backendCall = <Entity, Body = void>(
 		}
 	}).then(async (resp) => {
 		const data = await resp.json();
+		if (resp.status === 401 && !location.href.includes('/auth')) {
+			return goto('/auth');
+		}
 		if (resp.ok) {
 			return data;
 		}

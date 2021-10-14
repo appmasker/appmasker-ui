@@ -8,16 +8,13 @@
 	onMount(() => {
 		getDomains.dispatch();
 	});
-
-	function submitConfigChange(data) {
-		console.log('final submit now', data);
-	}
 </script>
 
 <h1>Domains</h1>
 
 <div class="block">
 	<Tile>
+		<h3>Getting Started</h3>
 		<p>
 			Configure the domains that you manage on behalf of your tenants. All domains automatically
 			have TLS certificates.
@@ -33,6 +30,7 @@
 				balance between them. Your tenants will need to create either a CNAME (for subdomains) or A/AAAA
 				(for root domains) record pointed to xxx.xx.xx.x
 			</li>
+			<!-- TODO: replace with public anycast IP -->
 			<li>
 				<b>Enter custom JSON data.</b> You can query this data from our API later. Use it to adjust your
 				app's UI for the tenant or enable other dynamic functionality.

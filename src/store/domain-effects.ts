@@ -8,6 +8,7 @@ export const createDomain = effectManager<DomainConfig, DomainConfigInput>(
 	createDomain$,
 	(payload) => backendCall('/domain/', 'POST', payload),
 	(response, success) => {
+		getDomains.dispatch();
 		showNotification$.set({
 			message: response.message,
 			title: success ? 'Success!' : 'Failed to create domain',

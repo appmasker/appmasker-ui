@@ -19,7 +19,6 @@
 	import type { AppSession } from '../types';
 
 	export async function load(params: LoadInput): Promise<LoadOutput> {
-		console.log('in load. session:', params, params.session as AppSession);
 		const session: AppSession = params.session;
 		return await authGuard(params.page.path, session.isAuthenticated);
 	}
@@ -54,14 +53,19 @@
 	<div slot="skip-to-content">
 		<SkipToContent />
 	</div>
-	<HeaderNav>
-		{#each links as link}
-			<HeaderNavItem href={link.href} text={link.text} />
-		{/each}
-		<!-- <HeaderNavMenu text="Menu">
+
+	<img class="logo" src="/images/appmasker-logo.svg" alt="AppMasker Logo" />
+
+	{#if $session.isAuthenticated}
+		<HeaderNav>
+			{#each links as link}
+				<HeaderNavItem href={link.href} text={link.text} />
+			{/each}
+			<!-- <HeaderNavMenu text="Menu">
       <HeaderNavItem href="/" text="Link 1" />
     </HeaderNavMenu> -->
-	</HeaderNav>
+		</HeaderNav>
+	{/if}
 </Header>
 {#if $session.isAuthenticated}
 	<SideNav bind:isOpen={isSideNavOpen}>
@@ -85,3 +89,11 @@
 		</Row>
 	</Grid>
 </Content>
+
+<style>
+	img.logo {
+		height: 1.3em;
+		position: relative;
+		right: 18px;
+	}
+</style>

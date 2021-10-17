@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { Tile } from 'carbon-components-svelte';
+	import { CodeSnippet, Link, Tile } from 'carbon-components-svelte';
+	import { APPMASKER_IPV4_ADDRESS, APPMASKER_IPV6_ADDRESS } from '../../utils/environment';
 	import { onMount } from 'svelte';
 
 	import DomainTable from '../../components/tables/DomainTable.svelte';
@@ -26,20 +27,50 @@
 		<br />
 		<ul>
 			<li>
-				<b>The IP Address of your backend service.</b> If you enter more than 1, AppMasker will load
-				balance between them. Your tenants will need to create either a CNAME (for subdomains) or A/AAAA
-				(for root domains) record pointed to xxx.xx.xx.x
+				<p>
+					<b>Address of your backend service.</b> Choose the IP Address or a domain name plus the port
+					number (probably :443).
+				</p>
+				<p>
+					For example: <code>example.com:443</code> or <code>188.38.2.1:443</code>.
+				</p>
 			</li>
-			<!-- TODO: replace with public anycast IP -->
+
 			<li>
-				<b>Enter custom JSON data.</b> You can query this data from our API later. Use it to adjust your
-				app's UI for the tenant or enable other dynamic functionality.
+				<b>Custom JSON data.</b> Query this data from our <Link href="/dashboard/api">API</Link> later.
+				Use it to adjust your app's UI for the tenant or enable other dynamic functionality.
 			</li>
 			<li>
-				<b>Create Redirects.</b>&nbsp;For example, you could have the <code>/logo</code> path for any
-				domain redirect to the tenant's logo (some url).
+				<b>Path Redirects.</b>&nbsp;For example, you could have the <code>/logo</code> path redirect
+				to the tenant's logo.
 			</li>
 		</ul>
+	</Tile>
+	<br />
+	<Tile>
+		<h4>DNS Records</h4>
+		<p>
+			Your tenants will need to create an A record pointed to <CodeSnippet
+				type="inline"
+				code={APPMASKER_IPV4_ADDRESS}
+			/>
+			and / or an AAAA record pointed to <CodeSnippet
+				type="inline"
+				code={APPMASKER_IPV6_ADDRESS}
+			/>.
+		</p>
+		<p>This will point their domains to AppMasker so that we can manage TLS certs and redirects.</p>
+	</Tile>
+	<br />
+	<Tile>
+		<h4>Having Trouble?</h4>
+		<p>
+			Send an email to <Link
+				href="mailto:support@appmasker.com?subject=Help%20with%20AppMasker&body=I%20have%20a%20question%20about%20AppMasker."
+			>
+				support@appmasker.com</Link
+			>
+		</p>
 	</Tile>
 </div>
 <div class="block">

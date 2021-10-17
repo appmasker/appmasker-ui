@@ -29,7 +29,7 @@
 
 	const headers: { key: keyof DomainConfig; value: number | string }[] = [
 		{ key: 'name', value: 'Name' },
-		{ key: 'ipAddresses', value: 'IP Addresses' },
+		{ key: 'ipAddresses', value: 'Addresses' },
 		{ key: 'data', value: 'Custom Data' },
 		{ key: 'redirects', value: 'Redirects' }
 	];

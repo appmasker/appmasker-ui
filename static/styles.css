@@ -34,3 +34,11 @@ ul, li {
 .bx--modal-container .bx--modal-header, .bx--modal-container .bx--modal-content, .bx--modal-container .bx--modal-content__regular-content  {
   padding-right: 1em !important;
 }
+
+input, textarea {
+  font-size: max(1em, 16px) !important;
+}
+
+code {
+      font-size: 0.8rem !important;
+}

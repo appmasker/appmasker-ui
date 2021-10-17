@@ -2,7 +2,7 @@ import type { DocConfig } from '../types';
 
 const domainResponse = {
 	name: 'example.com',
-	ipAddresses: ['172.32.1.1', '199.4.32.1'],
+	ipAddresses: ['172.32.1.1:443', 'example.com:443'],
 	data: { tenantName: 'Example Biz', customerId: 'fdjai-s0sd-da-d-9fjdpm' },
 	redirects: [
 		{ from: '/logo', to: 'https://s3.amazon.com/myaccount/example-biz.png' },
@@ -13,7 +13,12 @@ const domainResponse = {
 const domainResponseRows = [
 	{ id: 'x', fieldName: 'id', type: 'string', values: '' },
 	{ id: 'a', fieldName: 'name', type: 'string', values: '' },
-	{ id: 'b', fieldName: 'ipAddresses', type: 'Array<string>', values: '' },
+	{
+		id: 'b',
+		fieldName: 'ipAddresses',
+		type: 'Array<string>',
+		values: 'ex. mybackend.com:443 or 182.34.7.1:443'
+	},
 	{ id: 'c', fieldName: 'data', type: 'JSON Object', values: '' },
 	{ id: 'c1', fieldName: 'type', type: 'string', values: `root | subdomain` },
 	{ id: 'cxxx', fieldName: 'createdBy', type: 'string', values: "a user's UUID" },
@@ -52,7 +57,13 @@ export const createDomainDocConfig: DocConfig = {
 	requestType: 'Object',
 	requestRows: [
 		{ id: 'a', fieldName: 'name', type: 'string', values: '', required: 'Yes' },
-		{ id: 'b', fieldName: 'ipAddresses', type: 'Array<string>', values: '', required: 'Yes' },
+		{
+			id: 'b',
+			fieldName: 'ipAddresses',
+			type: 'Array<string>',
+			values: 'ex. mybackend.com:443 or 182.34.7.1:443',
+			required: 'Yes'
+		},
 		{ id: 'c', fieldName: 'data', type: 'JSON Object', values: '', required: 'No' },
 		{
 			id: 'd',

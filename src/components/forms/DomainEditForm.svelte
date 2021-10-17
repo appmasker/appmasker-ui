@@ -5,6 +5,7 @@
 	import { createEventDispatcher } from 'svelte';
 	import { IDomainForm, Redirect } from '../../types';
 	import { jsonPlaceholder } from '../../utils/consts';
+	import BackendAddressInput from './BackendAddressInput.svelte';
 
 	export let data = {} as IDomainForm;
 	export let isEdit = false;
@@ -12,6 +13,15 @@
 
 	function onSubmit(): void {
 		dispatch('submit', data);
+	}
+
+	function addAddress(): void {
+		data.ipAddresses = [...data.ipAddresses, ''];
+		console.log(data.ipAddresses);
+	}
+
+	function removeAddress(index: number): void {
+		data.ipAddresses = data.ipAddresses.filter((value, i) => i !== index);
 	}
 
 	function addRedirect(): void {
@@ -34,15 +44,31 @@
 		/>
 	</div>
 	<div class="block">
-		<TextArea
-			bind:value={data.ipAddresses}
-			rows={2}
-			labelText="IP Addresses"
-			helperText="Enter a comma-separated list of IP Addresses where your service is. Your tenant's domains will point to these. Enter more than 1 address for load-balancing."
-			placeholder="172.88.1.2,81.44.3.6"
-		/>
+		<div class="block">
+			<h5>Your Service Addresses</h5>
+			<p>
+				Enter your service's IP Address or a domain name with the port number (probably :443). More
+				than 1 address enables loadbalancing.
+			</p>
+		</div>
+		{#each data.ipAddresses as addr, index}
+			<div class="block redirect-form-row">
+				<BackendAddressInput bind:value={addr} />
+
+				<div class="row-inline-container">
+					<Button
+						kind="danger-tertiary"
+						size="field"
+						iconDescription="Delete"
+						icon={TrashCan16}
+						on:click={() => removeAddress(index)}
+					/>
+				</div>
+			</div>
+		{/each}
+		<Button kind="tertiary" size="field" on:click={addAddress}>+ Add Address</Button>
 	</div>
-	<div class="block">
+	<div class="block redirect-form-row">
 		<TextArea
 			bind:value={data.data}
 			rows={10}

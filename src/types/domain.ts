@@ -31,7 +31,7 @@ export interface IDomainForm {
 	/**
 	 * comma-delimited list of ip addresses
 	 */
-	ipAddresses: string;
+	ipAddresses: string[];
 	data?: string;
 	redirects?: Redirect[];
 }
@@ -41,8 +41,8 @@ export function toDomainForm(domainConfig: DomainConfig): IDomainForm {
 		return {
 			...domainConfig,
 			name: domainConfig.name ?? '',
-			ipAddresses: domainConfig.ipAddresses?.join(',') ?? '',
-			data: JSON.stringify(domainConfig.data, null, 2),
+			ipAddresses: domainConfig.ipAddresses ?? [''],
+			data: domainConfig.data ? JSON.stringify(domainConfig.data, null, 2) : '',
 			redirects: domainConfig.redirects ?? []
 		};
 	} catch (error) {
@@ -54,7 +54,6 @@ export function toDomainForm(domainConfig: DomainConfig): IDomainForm {
 export function toDomainConfigInput(input: IDomainForm): DomainConfigInput {
 	return {
 		...input,
-		ipAddresses: input.ipAddresses.split(','),
 		data: input.data ? JSON.parse(input.data) : null
 	};
 }

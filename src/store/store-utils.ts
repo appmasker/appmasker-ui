@@ -24,6 +24,7 @@ export const effectManager = <Entity, Payload = void>(
 				})
 				.catch((error) => {
 					console.error(error);
+					store.update((state) => ({ ...state, isLoading: false }));
 					afterEffect?.(error, false);
 					return error;
 				});

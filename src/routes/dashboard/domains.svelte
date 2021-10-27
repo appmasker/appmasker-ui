@@ -63,14 +63,24 @@
 	</Tile>
 	<br />
 	<Tile>
-		<h4>Having Trouble?</h4>
-		<p>
-			Send an email to <Link
-				href="mailto:support@appmasker.com?subject=Help%20with%20AppMasker&body=I%20have%20a%20question%20about%20AppMasker."
-			>
-				support@appmasker.com</Link
-			>
-		</p>
+		<h4>Verify that it worked</h4>
+		<br />
+		<ul>
+			<li>After creating / editing a domain, wait 1 minute for it to update in AppMasker</li>
+			<li>
+				Use cURL to see if the custom domain resolves to your service. For example: <code
+					>curl -D - https://mynewcustomdomain.com/health-check</code
+				>
+			</li>
+			<li>
+				Having trouble? Let us know: <Link
+					href="mailto:support@appmasker.com?subject=Help%20with%20AppMasker&body=I%20have%20a%20question%20about%20AppMasker."
+				>
+					support@appmasker.com</Link
+				>
+			</li>
+		</ul>
+		<p />
 	</Tile>
 </div>
 <div class="block">

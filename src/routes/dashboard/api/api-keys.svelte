@@ -63,7 +63,9 @@
 				/>
 				<br />
 				<b>{$generateApiKey$.data.name}</b> <br />
-				<CodeSnippet skeleton={$generateApiKey$.isLoading} code={$generateApiKey$.data.apiKey} />
+				<div class="full-story-hidden">
+					<CodeSnippet skeleton={$generateApiKey$.isLoading} code={$generateApiKey$.data.apiKey} />
+				</div>
 			</Tile>
 		</div>
 	{/if}

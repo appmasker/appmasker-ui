@@ -1,5 +1,7 @@
+import analyticsService from '../services/analytics-service';
 import { backendCall } from '../api';
 import type { DomainConfig, DomainConfigInput } from '../types';
+import {AppEvent} from '../types';
 import { accountDomains$, createDomain$ } from './domain.state';
 import { effectManager } from './store-utils';
 import { showNotification$ } from './user.state';
@@ -8,6 +10,7 @@ export const createDomain = effectManager<DomainConfig, DomainConfigInput>(
 	createDomain$,
 	(payload) => backendCall('/domain/', 'POST', payload),
 	(response, success) => {
+		analyticsService.event(AppEvent.CREATED_DOMAIN, response.data);
 		getDomains.dispatch();
 		showNotification$.set({
 			message: response.message,

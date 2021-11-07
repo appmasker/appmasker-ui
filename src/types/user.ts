@@ -1,6 +1,7 @@
 import type { Account } from './account';
 
 export interface User {
+	id: string;
 	email: string;
 
 	password: string;

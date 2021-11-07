@@ -1,5 +1,5 @@
-import type { AsyncState, User } from '../types';
 import { writable } from 'svelte/store';
+import type { AsyncState, User } from '../types';
 
 export const currentUserInitialState = { data: null, isLoading: false };
 export const currentUser$ = writable<AsyncState<User>>(currentUserInitialState);

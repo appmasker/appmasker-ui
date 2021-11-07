@@ -1,16 +1,10 @@
 <script lang="ts">
-	import { Button, Tile } from 'carbon-components-svelte';
+	import { Button,Tile } from 'carbon-components-svelte';
 	import CheckmarkFilled16 from 'carbon-icons-svelte/lib/CheckmarkFilled16';
 	import CurrencyDollar32 from 'carbon-icons-svelte/lib/CurrencyDollar32';
-	import { onMount } from 'svelte';
 	import { currentUser$ } from '../../store';
 	import { isSubscribed } from '../../utils/billing';
-	import { BACKEND_HOST, BUSINESS_STANDARD_PRICE_ID } from '../../utils/environment';
-	import { getCurrentUser } from './../../store/effects';
-
-	onMount(() => {
-		getCurrentUser.dispatch();
-	});
+	import { BACKEND_HOST,BUSINESS_STANDARD_PRICE_ID } from '../../utils/environment';
 </script>
 
 <h1>Billing</h1>

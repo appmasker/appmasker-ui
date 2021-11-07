@@ -26,6 +26,11 @@
 
 <script lang="ts">
 	import NotificationPopup from '../components/NotificationPopup.svelte';
+	import analyticsService from '../services/analytics-service';
+	import { getCurrentUser } from '../store';
+	import { onMount } from 'svelte';
+
+	export let isAuthenticated = false;
 
 	let isSideNavOpen = false;
 	let links = [
@@ -35,6 +40,13 @@
 		{ text: 'Billing', href: '/dashboard/billing' },
 		{ text: 'Help', href: '/dashboard/help' }
 	];
+
+	onMount(() => {
+		if (isAuthenticated) {
+			getCurrentUser.dispatch();
+		}
+		analyticsService.init();
+	});
 </script>
 
 <svelte:head>

@@ -2,7 +2,7 @@
 	import { goto } from '$app/navigation';
 
 	import { Button, Form, Link, PasswordInput, TextInput, Tile } from 'carbon-components-svelte';
-	import { showNotification$ } from '../../store';
+	import { getCurrentUser, showNotification$, signIn } from '../../store';
 	import { backendCall } from '../../api';
 	import type { User } from '../../types';
 
@@ -16,6 +16,7 @@
 			password
 		})
 			.then((result) => {
+				getCurrentUser.dispatch();
 				goto('/');
 			})
 			.catch((err) => {

@@ -1,4 +1,4 @@
-export const ENVIRONMENT = import.meta.env.VITE_ENVIRONMENET as 'development' | 'production';
+export const ENVIRONMENT = import.meta.env.VITE_ENVIRONMENT as 'development' | 'production';
 
 export const BACKEND_HOST = import.meta.env.VITE_BACKEND as string;
 

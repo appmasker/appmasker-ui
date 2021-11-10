@@ -17,11 +17,7 @@
 	<Tile>
 		<h3>Getting Started</h3>
 		<p>
-			Configure the domains that you manage on behalf of your tenants. All domains automatically
-			have TLS certificates.
-		</p>
-		<p>
-			Check a row to edit or delete 1 or more domains. Here are some things that you can configure
+			Here are some things that you can configure
 			for a domain:
 		</p>
 		<br />
@@ -49,8 +45,10 @@
 	<br />
 	<Tile>
 		<h4>DNS Records</h4>
-		<p>
-			Your tenants will need to create an A record pointed to <CodeSnippet
+		<br>
+		<ul>
+			<li>
+				Each custom domain needs an A record pointed to <CodeSnippet
 				type="inline"
 				code={APPMASKER_IPV4_ADDRESS}
 			/>
@@ -58,30 +56,24 @@
 				type="inline"
 				code={APPMASKER_IPV6_ADDRESS}
 			/>.
-		</p>
-		<p>This will point their domains to AppMasker so that we can manage TLS certs and redirects.</p>
+			</li>
+		</ul>
 	</Tile>
 	<br />
+	{#if $accountDomains$.data.domains?.length}
 	<Tile>
 		<h4>Verify that it worked</h4>
 		<br />
 		<ul>
-			<li>After creating / editing a domain, wait 1 minute for it to update in AppMasker</li>
 			<li>
-				Use cURL to see if the custom domain resolves to your service. For example: <code
+				Use cURL to see if the custom domain resolves to your service: <code
 					>curl -D - https://mynewcustomdomain.com/health-check</code
-				>
-			</li>
-			<li>
-				Having trouble? Let us know: <Link
-					href="mailto:support@appmasker.com?subject=Help%20with%20AppMasker&body=I%20have%20a%20question%20about%20AppMasker."
-				>
-					support@appmasker.com</Link
 				>
 			</li>
 		</ul>
 		<p />
 	</Tile>
+	{/if}
 </div>
 <div class="block">
 	<DomainTable rows={$accountDomains$.data.domains} isLoading={$accountDomains$.isLoading} />

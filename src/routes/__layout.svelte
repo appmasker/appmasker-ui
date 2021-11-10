@@ -56,7 +56,6 @@
 <NotificationPopup />
 
 <Header
-	company="AppMasker"
 	platformName=""
 	persistentHamburgerMenu={false}
 	expandedByDefault={false}
@@ -66,7 +65,7 @@
 		<SkipToContent />
 	</div>
 
-	<img class="logo" src="/images/appmasker-logo.svg" alt="AppMasker Logo" />
+	<img class="logo" src="/images/appmasker-white-font.png" alt="AppMasker Logo" />
 
 	{#if $session.isAuthenticated}
 		<HeaderNav>

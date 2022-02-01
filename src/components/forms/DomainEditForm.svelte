@@ -1,5 +1,13 @@
 <script lang="ts">
-	import { Button, Form, TextArea, TextInput } from 'carbon-components-svelte';
+	import {
+		Accordion,
+		AccordionItem,
+		Button,
+		Checkbox,
+		Form,
+		TextArea,
+		TextInput
+	} from 'carbon-components-svelte';
 	import ArrowRight16 from 'carbon-icons-svelte/lib/ArrowRight16';
 	import TrashCan16 from 'carbon-icons-svelte/lib/TrashCan16';
 	import { createEventDispatcher } from 'svelte';
@@ -17,7 +25,6 @@
 
 	function addAddress(): void {
 		data.ipAddresses = [...data.ipAddresses, ''];
-		console.log(data.ipAddresses);
 	}
 
 	function removeAddress(index: number): void {
@@ -31,19 +38,32 @@
 	function removeRedir(index: number): void {
 		data.redirects = data.redirects.filter((value, i) => i !== index);
 	}
+
+	function addHeader(): void {
+		data.headersDownstream = [...data.headersDownstream, ['', '']];
+	}
+
+	function removeHeader(index: number): void {
+		data.headersDownstream = data.headersDownstream.filter((value, i) => i !== index);
+	}
 </script>
 
 <Form on:submit={onSubmit}>
-	<div class="block">
-		<TextInput
-			bind:value={data.name}
-			disabled={isEdit}
-			labelText="Domain name"
-			placeholder="example.com or tenant.yoursite.com"
-			helperText="Enter a root domain or subdomain that your tenant will use to access your service"
-		/>
+	<div class="block bottom-margin">
+		<div class="block">
+			<h5>Custom Domain Name</h5>
+			<TextInput
+				bind:value={data.name}
+				disabled={isEdit}
+				hideLabel={true}
+				labelText="Domain name"
+				placeholder="example.com or tenant.yoursite.com"
+				helperText="Enter a root domain or subdomain that your tenant will use to access your service"
+				required
+			/>
+		</div>
 	</div>
-	<div class="block">
+	<div class="block bottom-margin">
 		<div class="block">
 			<h5>Your Service Addresses</h5>
 			<p>
@@ -68,16 +88,23 @@
 		{/each}
 		<Button kind="tertiary" size="field" on:click={addAddress}>+ Add Address</Button>
 	</div>
-	<div class="block redirect-form-row">
-		<TextArea
-			bind:value={data.data}
-			rows={10}
-			labelText="Tenant Data"
-			placeholder={jsonPlaceholder}
-			helperText="Generally the structure of this object will be consistent with all your tenants but the values should vary."
-		/>
+	<div class="block redirect-form-row bottom-margin">
+		<div class="block">
+			<h5>Tenant Data</h5>
+			<p>Optional. You can query this data from our API later.</p>
+			<div class="block">
+				<TextArea
+					bind:value={data.data}
+					rows={10}
+					labelText="Tenant Data"
+					hideLabel={true}
+					placeholder={jsonPlaceholder}
+					helperText="Generally the structure of this object will be consistent with all your tenants but the values should vary."
+				/>
+			</div>
+		</div>
 	</div>
-	<div class="block">
+	<div class="block bottom-margin">
 		<div class="block">
 			<h5>Redirects</h5>
 			<p>
@@ -113,6 +140,62 @@
 		{/each}
 		<Button kind="tertiary" size="field" on:click={addRedirect}>+ Add A Redirect</Button>
 	</div>
+
+	<div class="block bottom-margin">
+		<div class="block">
+			<h5>Client Headers</h5>
+			<p>
+				Rewrite "downstream" headers. Downstream refers to the client making the call to this domain
+				(such as a user's browser). You might need to overwrite headers if you don't control the
+				server at the service address you listed above.
+			</p>
+		</div>
+		{#each data.headersDownstream as header, index}
+			<div class="block redirect-form-row">
+				<div class="header-name">
+					<TextInput
+						bind:value={header[0]}
+						labelText="Header Name"
+						placeholder="Access-Control-Allow-Origin"
+						required
+					/>
+				</div>
+				<div class="header-value">
+					<TextInput
+						bind:value={header[1]}
+						labelText="Header Value"
+						placeholder="*"
+						helperText="Mutiple values should be comma-delimited (no spaces)."
+						required
+					/>
+				</div>
+				<div class="row-inline-container">
+					<Button
+						kind="danger-tertiary"
+						size="field"
+						iconDescription="Delete"
+						icon={TrashCan16}
+						on:click={() => removeHeader(index)}
+					/>
+				</div>
+			</div>
+		{/each}
+		<Button kind="tertiary" size="field" on:click={addHeader}>+ Add A Header</Button>
+	</div>
+
+	<div class="block bottom-margin">
+		<Accordion>
+			<AccordionItem title="Advanced...">
+				<div class="block">
+					<div class="block">
+						<p>Enable this if you're running into HTTPS errors when using this domain.</p>
+					</div>
+
+					<Checkbox labelText="Ignore TLS Insecure Verify" bind:checked={data.skipTLSVerify} />
+				</div>
+			</AccordionItem>
+		</Accordion>
+	</div>
 </Form>
 
 <style>
@@ -134,5 +217,16 @@
 	}
 	.redirect-to {
 		flex: 2;
+	}
+
+	.header-name {
+		flex: 6;
+	}
+	.header-value {
+		flex: 7;
+	}
+
+	.bottom-margin {
+		margin-bottom: 4em;
 	}
 </style>

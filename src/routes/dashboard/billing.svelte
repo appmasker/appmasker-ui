@@ -1,10 +1,10 @@
 <script lang="ts">
-	import { Button,Tile } from 'carbon-components-svelte';
+	import { Button, Tile } from 'carbon-components-svelte';
 	import CheckmarkFilled16 from 'carbon-icons-svelte/lib/CheckmarkFilled16';
 	import CurrencyDollar32 from 'carbon-icons-svelte/lib/CurrencyDollar32';
 	import { currentUser$ } from '../../store';
 	import { isSubscribed } from '../../utils/billing';
-	import { BACKEND_HOST,BUSINESS_STANDARD_PRICE_ID } from '../../utils/environment';
+	import { BACKEND_HOST, BUSINESS_STANDARD_PRICE_ID } from '../../utils/environment';
 </script>
 
 <h1>Billing</h1>
@@ -19,7 +19,7 @@
 	<br />
 	<Tile>
 		<h3>Free Trial</h3>
-		<ul class="block">
+		<ul class="block app">
 			<li>Create 2 domains to try out AppMasker</li>
 			<li>No Credit Card required</li>
 		</ul>
@@ -27,7 +27,7 @@
 	<br />
 	<Tile>
 		<h3>Business - $50/mo</h3>
-		<ul class="block">
+		<ul class="block app">
 			<li>Includes 10 domains</li>
 			<li>Additional domains at $3 / domain per month</li>
 			<li>Refunds and deleted domains will be prorated</li>

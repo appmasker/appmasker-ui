@@ -4,5 +4,6 @@ export * from './app-event.enum';
 export * from './app-session';
 export * from './doc-config';
 export * from './domain';
+export * from './headers';
 export * from './state';
 export * from './user';

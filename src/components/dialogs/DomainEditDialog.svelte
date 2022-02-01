@@ -1,6 +1,6 @@
 <script lang="ts">
+	import { Modal } from 'carbon-components-svelte';
 	import { createEventDispatcher } from 'svelte';
-	import { Button, Modal, Form, TextArea, TextInput } from 'carbon-components-svelte';
 	import { DomainConfig, IDomainForm, toDomainConfigInput, toDomainForm } from '../../types';
 	import DomainEditForm from '../forms/DomainEditForm.svelte';
 
@@ -12,8 +12,8 @@
 
 	const dispatch = createEventDispatcher();
 
-	function closeModal(data: IDomainForm[], doSumbit: boolean): void {
-		if (doSumbit) {
+	function closeModal(data: IDomainForm[], doSubmit: boolean): void {
+		if (doSubmit) {
 			const domainInput = data.map(toDomainConfigInput);
 			dispatch('submit', {
 				data: domainInput

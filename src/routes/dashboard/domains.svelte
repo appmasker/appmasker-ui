@@ -16,12 +16,9 @@
 <div class="block">
 	<Tile>
 		<h3>Getting Started</h3>
-		<p>
-			Here are some things that you can configure
-			for a domain:
-		</p>
+		<p>Here are some things that you can configure for a domain:</p>
 		<br />
-		<ul>
+		<ul class="app">
 			<li>
 				<p>
 					<b>Address of your backend service.</b> Choose the IP Address or a domain name plus the port
@@ -45,34 +42,34 @@
 	<br />
 	<Tile>
 		<h4>DNS Records</h4>
-		<br>
-		<ul>
+		<br />
+		<ul class="app">
 			<li>
 				Each custom domain needs an A record pointed to <CodeSnippet
-				type="inline"
-				code={APPMASKER_IPV4_ADDRESS}
-			/>
-			and / or an AAAA record pointed to <CodeSnippet
-				type="inline"
-				code={APPMASKER_IPV6_ADDRESS}
-			/>.
+					type="inline"
+					code={APPMASKER_IPV4_ADDRESS}
+				/>
+				and / or an AAAA record pointed to <CodeSnippet
+					type="inline"
+					code={APPMASKER_IPV6_ADDRESS}
+				/>.
 			</li>
 		</ul>
 	</Tile>
 	<br />
 	{#if $accountDomains$.data.domains?.length}
-	<Tile>
-		<h4>Verify that it worked</h4>
-		<br />
-		<ul>
-			<li>
-				Use cURL to see if the custom domain resolves to your service: <code
-					>curl -D - https://mynewcustomdomain.com/health-check</code
-				>
-			</li>
-		</ul>
-		<p />
-	</Tile>
+		<Tile>
+			<h4>Verify that it worked</h4>
+			<br />
+			<ul class="app">
+				<li>
+					Use cURL to see if the custom domain resolves to your service: <code
+						>curl -D - https://mynewcustomdomain.com/health-check</code
+					>
+				</li>
+			</ul>
+			<p />
+		</Tile>
 	{/if}
 </div>
 <div class="block">

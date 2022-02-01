@@ -18,11 +18,11 @@ b {
   font-weight: bold !important;
 }
 
-ul {
+ul.app {
   list-style: initial !important;
 }
 
-ul, li {
+ul.app, ul.app > li {
   margin-left: 1rem !important;
   line-height: 1.2rem !important;
   font-size: initial !important;

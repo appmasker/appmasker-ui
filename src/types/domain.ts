@@ -1,3 +1,5 @@
+import type { HeaderConfig, HeaderFormList } from ".";
+
 export class Redirect {
 	/**
 	 * Url path such as `/logo` or `/styles.css`
@@ -16,6 +18,8 @@ export interface DomainConfig {
 	ipAddresses: string[];
 	data: { [key: string]: any };
 	redirects: Redirect[];
+	skipTLSVerify: boolean;
+	headersDownstream: HeaderConfig;
 }
 
 export interface DomainConfigInput {
@@ -24,6 +28,8 @@ export interface DomainConfigInput {
 	ipAddresses: string[];
 	data?: { [key: string]: any };
 	redirects?: Redirect[];
+	skipTLSVerify: boolean;
+	headersDownstream?: HeaderConfig;
 }
 
 export interface IDomainForm {
@@ -34,6 +40,8 @@ export interface IDomainForm {
 	ipAddresses: string[];
 	data?: string;
 	redirects?: Redirect[];
+	skipTLSVerify: boolean;
+	headersDownstream?: HeaderFormList;
 }
 
 export function toDomainForm(domainConfig: DomainConfig): IDomainForm {
@@ -43,6 +51,7 @@ export function toDomainForm(domainConfig: DomainConfig): IDomainForm {
 			name: domainConfig.name ?? '',
 			ipAddresses: domainConfig.ipAddresses ?? [''],
 			data: domainConfig.data ? JSON.stringify(domainConfig.data, null, 2) : '',
+			headersDownstream: domainConfig.headersDownstream ? headerConfigToForm(domainConfig.headersDownstream) : [],
 			redirects: domainConfig.redirects ?? []
 		};
 	} catch (error) {
@@ -54,6 +63,21 @@ export function toDomainForm(domainConfig: DomainConfig): IDomainForm {
 export function toDomainConfigInput(input: IDomainForm): DomainConfigInput {
 	return {
 		...input,
-		data: input.data ? JSON.parse(input.data) : null
+		data: input.data ? JSON.parse(input.data) : null,
+		headersDownstream: headerListToObject(input.headersDownstream)
 	};
+}
+
+const headerListToObject = (list: HeaderFormList): HeaderConfig => {
+	return list.reduce((prev, curr) => {
+		prev[curr[0]] = curr[1].split(',');
+		return prev;
+	}, {} as HeaderConfig);
+}
+
+const headerConfigToForm = (config: HeaderConfig): HeaderFormList => {
+	const entries = Object.entries(config);
+	return entries.map(entry => {
+		return [entry[0], entry[1].join(',')];
+	});
 }

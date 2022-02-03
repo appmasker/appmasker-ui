@@ -16,6 +16,7 @@
 	} from 'carbon-components-svelte';
 	import Delete16 from 'carbon-icons-svelte/lib/Delete16';
 	import Edit16 from 'carbon-icons-svelte/lib/Edit16';
+	import { getDomainPresetFromUrl } from '../../utils/domain-presets';
 	import { createDomain, createDomain$, deleteDomains, editDomains } from '../../store';
 	import type { DomainConfig, DomainConfigInput, Redirect } from '../../types';
 	import ConfigDialog from '../dialogs/ConfigDialog.svelte';
@@ -50,9 +51,13 @@
 	}
 
 	function openDomainEditForm(isEdit: boolean): void {
+		const preset = getDomainPresetFromUrl();
+
 		domainModalIsEdit = isEdit;
 		domainModalData = isEdit
 			? rows.filter((row) => selectedRowIds.includes(row.id))
+			: preset
+			? [preset.config as DomainConfig]
 			: ([{}] as DomainConfig[]);
 		domainModalOpen = true;
 	}

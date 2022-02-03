@@ -1,10 +1,11 @@
 import analyticsService from '../services/analytics-service';
 import { backendCall } from '../api';
 import type { DomainConfig, DomainConfigInput } from '../types';
-import {AppEvent} from '../types';
+import { AppEvent } from '../types';
 import { accountDomains$, createDomain$ } from './domain.state';
 import { effectManager } from './store-utils';
 import { showNotification$ } from './user.state';
+import { removePresetQueryParam } from '../utils/domain-presets';
 
 export const createDomain = effectManager<DomainConfig, DomainConfigInput>(
 	createDomain$,
@@ -12,6 +13,9 @@ export const createDomain = effectManager<DomainConfig, DomainConfigInput>(
 	(response, success) => {
 		analyticsService.event(AppEvent.CREATED_DOMAIN, response.data);
 		getDomains.dispatch();
+		if (success) {
+			removePresetQueryParam();
+		}
 		showNotification$.set({
 			message: response.message,
 			title: success ? 'Success!' : 'Failed to create domain',

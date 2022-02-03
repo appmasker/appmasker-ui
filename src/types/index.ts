@@ -3,6 +3,7 @@ export * from './api-key';
 export * from './app-event.enum';
 export * from './app-session';
 export * from './doc-config';
+export * from './domain-preset';
 export * from './domain';
 export * from './headers';
 export * from './state';

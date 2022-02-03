@@ -1,10 +1,9 @@
 <script lang="ts">
 	import { CodeSnippet, Link, Tile } from 'carbon-components-svelte';
-	import { APPMASKER_IPV4_ADDRESS, APPMASKER_IPV6_ADDRESS } from '../../utils/environment';
 	import { onMount } from 'svelte';
-
 	import DomainTable from '../../components/tables/DomainTable.svelte';
 	import { accountDomains$, getDomains } from '../../store';
+	import { APPMASKER_IPV4_ADDRESS, APPMASKER_IPV6_ADDRESS } from '../../utils/environment';
 
 	onMount(() => {
 		getDomains.dispatch();

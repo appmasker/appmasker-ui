@@ -40,7 +40,7 @@
 		{ key: 'ipAddresses', value: 'Addresses' },
 		{ key: 'data', value: 'Custom Data' },
 		{ key: 'redirects', value: 'Redirects' },
-		{ key: 'dns', value: 'DNS' }
+		{ key: 'dns', value: 'Status' }
 	];
 
 	let domainModalOpen = false;

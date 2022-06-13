@@ -70,10 +70,14 @@
 			<br />
 			<ul class="app">
 				<li>
-					Use cURL to see if the custom domain resolves to your service: <code
-						>curl -D - https://mynewcustomdomain.com/health-check</code
-					>
+					Check the "Status" column in the table below to verify that your created the proper DNS
+					records
 				</li>
+				<li>
+					If the status is good but your domain still doesn't work, give the DNS changes 24 hours to
+					update
+				</li>
+				<li>You can also try your domain in an incognito tab or on a different device</li>
 			</ul>
 			<p />
 		</Tile>

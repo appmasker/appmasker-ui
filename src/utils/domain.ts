@@ -42,16 +42,21 @@ export const chooseDNSStatus = (status: DomainDNSRecordData): { status: DNS_RECO
   if (status.ipv6.addresses.length > 1) {
     return {
       status: DNS_RECORD_STATUS.WARNING,
-      message: `Please remove the A Record with value ${status.ipv6.addresses.find(addr => addr !== APPMASKER_IPV6_ADDRESS)} from your registrar DNS settings.`
+      message: `Please remove the AAAA Record with value ${status.ipv6.addresses.find(addr => addr !== APPMASKER_IPV6_ADDRESS)} from your registrar DNS settings.`
     };
   }
 
   if (!arraysAreEqual(status.ipv6.addresses, [APPMASKER_IPV6_ADDRESS])) {
     return {
       status: DNS_RECORD_STATUS.WARNING,
-      message: `Please modify the A Record so that the value is ${APPMASKER_IPV6_ADDRESS}.`
-    }
+      message: `Please modify the AAAA Record so that the value is ${APPMASKER_IPV6_ADDRESS}.`
+    };
   }
+
+  return {
+    status: DNS_RECORD_STATUS.GOOD,
+    message: goodMessage
+  };
 
 }
 

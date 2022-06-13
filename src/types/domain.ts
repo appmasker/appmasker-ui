@@ -44,6 +44,26 @@ export interface IDomainForm {
 	headersDownstream?: HeaderFormList;
 }
 
+export interface DomainRecordCheckResponse {
+	[domainName: string]: DomainDNSRecordData;
+};
+
+export enum DNS_RECORD_STATUS {
+	GOOD = 'good',
+	ERROR = 'error',
+	WARNING = 'warning',
+}
+export interface DomainDNSRecordData {
+	ipv4?: {
+		addresses: string[];
+		error: any;
+	};
+	ipv6?: {
+		addresses: string[];
+		error: any;
+	};
+}
+
 export function toDomainForm(domainConfig: DomainConfig): IDomainForm {
 	try {
 		return {

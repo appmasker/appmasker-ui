@@ -1,8 +1,8 @@
 import analyticsService from '../services/analytics-service';
 import { backendCall } from '../api';
-import type { DomainConfig, DomainConfigInput } from '../types';
+import type { DomainConfig, DomainConfigInput, DomainRecordCheckResponse } from '../types';
 import { AppEvent } from '../types';
-import { accountDomains$, createDomain$ } from './domain.state';
+import { accountDomains$, createDomain$, dnsStatus$ } from './domain.state';
 import { effectManager } from './store-utils';
 import { showNotification$ } from './user.state';
 import { removePresetQueryParam } from '../utils/domain-presets';
@@ -82,5 +82,19 @@ export const deleteDomains = effectManager<{ count: number; domains: DomainConfi
 			title: success ? 'Success!' : 'Failed to delete domain(s)',
 			kind: success ? 'success' : 'error'
 		});
+	}
+);
+
+export const getDnsStatus = effectManager<DomainRecordCheckResponse, { domains: string[] }>(
+	dnsStatus$,
+	(payload) => backendCall('/domain/dns-check', 'POST', payload),
+	(response, success) => {
+		if (!success) {
+			showNotification$.set({
+				message: response.message,
+				title: 'Failed to check DNS records',
+				kind: 'error'
+			});
+		}
 	}
 );

@@ -1,13 +1,21 @@
 <script lang="ts">
-	import { CodeSnippet, Link, Tile } from 'carbon-components-svelte';
-	import { onMount } from 'svelte';
+	import { CodeSnippet, Tile } from 'carbon-components-svelte';
+	import { onDestroy, onMount } from 'svelte';
 	import DomainTable from '../../components/tables/DomainTable.svelte';
-	import { accountDomains$, getDomains } from '../../store';
+	import { accountDomains$, getDomains, dnsStatus$, getDnsStatus } from '../../store';
 	import { APPMASKER_IPV4_ADDRESS, APPMASKER_IPV6_ADDRESS } from '../../utils/environment';
 
 	onMount(() => {
 		getDomains.dispatch();
 	});
+
+	const unsub = accountDomains$.subscribe((data) => {
+		if (data.data.count && !data.isLoading) {
+			getDnsStatus.dispatch({ domains: data.data.domains.map((domain) => domain.name) });
+		}
+	});
+
+	onDestroy(unsub);
 </script>
 
 <h1>Domains</h1>
@@ -28,10 +36,10 @@
 				</p>
 			</li>
 
-			<li>
+			<!-- <li>
 				<b>Custom JSON data.</b> Query this data from our <Link href="/dashboard/api">API</Link> later.
 				Use it to adjust your app's UI for the tenant or enable other dynamic functionality.
-			</li>
+			</li> -->
 			<li>
 				<b>Path Redirects.</b>&nbsp;For example, you could have the <code>/logo</code> path redirect
 				to the tenant's logo.
@@ -72,5 +80,9 @@
 	{/if}
 </div>
 <div class="block">
-	<DomainTable rows={$accountDomains$.data.domains} isLoading={$accountDomains$.isLoading} />
+	<DomainTable
+		rows={$accountDomains$.data.domains}
+		dnsStatus={$dnsStatus$.data}
+		isLoading={$accountDomains$.isLoading}
+	/>
 </div>

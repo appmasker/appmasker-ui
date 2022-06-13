@@ -2,7 +2,7 @@ export async function get() {
 	// Do some magic here... ✨
 
 	return {
-		headers: { Location: '/auth/signup' },
+		headers: { Location: '/auth/login' },
 		status: 302
 	};
 }

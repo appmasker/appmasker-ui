@@ -16,23 +16,31 @@
 	} from 'carbon-components-svelte';
 	import Delete16 from 'carbon-icons-svelte/lib/Delete16';
 	import Edit16 from 'carbon-icons-svelte/lib/Edit16';
-	import { getDomainPresetFromUrl } from '../../utils/domain-presets';
 	import { createDomain, createDomain$, deleteDomains, editDomains } from '../../store';
-	import type { DomainConfig, DomainConfigInput, Redirect } from '../../types';
+	import type {
+		DomainConfig,
+		DomainConfigInput,
+		DomainRecordCheckResponse,
+		Redirect
+	} from '../../types';
+	import { getDomainPresetFromUrl } from '../../utils/domain-presets';
 	import ConfigDialog from '../dialogs/ConfigDialog.svelte';
 	import DomainEditDialog from '../dialogs/DomainEditDialog.svelte';
+	import DomainStatus from '../DomainStatus.svelte';
 
 	export let rows: DomainConfig[] = [];
+	export let dnsStatus: DomainRecordCheckResponse = {};
 	export let isLoading = false;
 
 	let selectedRowIds: string[] = [];
 	let expandedRowIds: string[] = [];
 
-	const headers: { key: keyof DomainConfig; value: number | string }[] = [
+	const headers: { key: string; value: number | string }[] = [
 		{ key: 'name', value: 'Name' },
 		{ key: 'ipAddresses', value: 'Addresses' },
 		{ key: 'data', value: 'Custom Data' },
-		{ key: 'redirects', value: 'Redirects' }
+		{ key: 'redirects', value: 'Redirects' },
+		{ key: 'dns', value: 'DNS' }
 	];
 
 	let domainModalOpen = false;
@@ -142,6 +150,8 @@
 					{:else}
 						None
 					{/if}
+				{:else if cell.key === 'dns'}
+					<DomainStatus status={dnsStatus[row.name]} />
 				{:else}
 					{cell.value}
 				{/if}

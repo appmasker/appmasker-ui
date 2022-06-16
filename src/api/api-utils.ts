@@ -25,7 +25,7 @@ export const backendCall = <Entity, Body = void>(
 	}).then(async (resp) => {
 		const data = (await resp?.json()) || {};
 		if (resp.status === 401 && !location.href.includes('/auth')) {
-			return goto('/auth');
+			return goto('/auth/login');
 		}
 		if (resp.ok) {
 			return data;

@@ -1,0 +1,1 @@
+export type ValidatorFunction<T = unknown> = (value: T) => string | null;

@@ -10,7 +10,7 @@
 	});
 
 	const unsub = accountDomains$.subscribe((data) => {
-		if (data.data.count && !data.isLoading) {
+		if (data.data.count && !data.isLoading && data.data.domains.every((d) => d.name)) {
 			getDnsStatus.dispatch({ domains: data.data.domains.map((domain) => domain.name) });
 		}
 	});
@@ -70,14 +70,14 @@
 			<br />
 			<ul class="app">
 				<li>
-					Check the "Status" column in the table below to verify that your created the proper DNS
+					Check the "Status" column in the table below to verify that you created the proper DNS
 					records
 				</li>
 				<li>
 					If the status is good but your domain still doesn't work, give the DNS changes 24 hours to
 					update
 				</li>
-				<li>You can also try your domain in an incognito tab or on a different device</li>
+				<li>Try your domain in an incognito tab or on a different device</li>
 			</ul>
 			<p />
 		</Tile>

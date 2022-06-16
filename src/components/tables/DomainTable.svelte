@@ -38,7 +38,7 @@
 	const headers: { key: string; value: number | string }[] = [
 		{ key: 'name', value: 'Name' },
 		{ key: 'ipAddresses', value: 'Addresses' },
-		{ key: 'data', value: 'Custom Data' },
+		// { key: 'data', value: 'Custom Data' },
 		{ key: 'redirects', value: 'Redirects' },
 		{ key: 'dns', value: 'Status' }
 	];

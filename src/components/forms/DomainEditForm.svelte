@@ -5,15 +5,19 @@
 		Button,
 		Checkbox,
 		Form,
-		TextArea,
 		TextInput
 	} from 'carbon-components-svelte';
 	import ArrowRight16 from 'carbon-icons-svelte/lib/ArrowRight16';
 	import TrashCan16 from 'carbon-icons-svelte/lib/TrashCan16';
 	import { createEventDispatcher } from 'svelte';
 	import { IDomainForm, Redirect } from '../../types';
-	import { jsonPlaceholder } from '../../utils/consts';
-	import BackendAddressInput from './BackendAddressInput.svelte';
+	import {
+		domainNameValidator,
+		ipAddressValidator,
+		redirectFromValidator,
+		redirectToValidator
+	} from '../../utils/validators';
+	import Validator from './Validator.svelte';
 
 	export let data = {} as IDomainForm;
 	export let isEdit = false;
@@ -52,15 +56,22 @@
 	<div class="block bottom-margin">
 		<div class="block">
 			<h5>Custom Domain Name</h5>
-			<TextInput
-				bind:value={data.name}
-				disabled={isEdit}
-				hideLabel={true}
-				labelText="Domain name"
-				placeholder="example.com or tenant.yoursite.com"
-				helperText="Enter a root domain or subdomain that your tenant will use to access your service"
-				required
-			/>
+
+			<Validator value={data.name} fn={domainNameValidator} let:onBlur let:invalid let:invalidText>
+				<TextInput
+					bind:value={data.name}
+					id="domain-name"
+					disabled={isEdit}
+					hideLabel={true}
+					labelText="Domain name"
+					placeholder="example.com or tenant.yoursite.com"
+					helperText="Enter a root domain or subdomain that your tenant will use to access your service"
+					required
+					on:blur={onBlur}
+					{invalid}
+					{invalidText}
+				/>
+			</Validator>
 		</div>
 	</div>
 	<div class="block bottom-margin">
@@ -73,8 +84,21 @@
 		</div>
 		{#each data.ipAddresses as addr, index}
 			<div class="block redirect-form-row">
-				<BackendAddressInput bind:value={addr} />
-
+				<Validator value={addr} fn={ipAddressValidator} let:onBlur let:invalid let:invalidText>
+					<div class="backend-address-container">
+						<TextInput
+							id="ipAddress"
+							bind:value={addr}
+							labelText="Your Service IP Address / Domain name"
+							placeholder="example.com:443 or 199.28.2.1:443"
+							helperText="You should include the port number (likely :443). Don't include https://"
+							required
+							on:blur={onBlur}
+							{invalid}
+							{invalidText}
+						/>
+					</div>
+				</Validator>
 				<div class="row-inline-container">
 					<Button
 						kind="danger-tertiary"
@@ -88,7 +112,7 @@
 		{/each}
 		<Button kind="tertiary" size="field" on:click={addAddress}>+ Add Address</Button>
 	</div>
-	<div class="block redirect-form-row bottom-margin">
+	<!-- <div class="block redirect-form-row bottom-margin">
 		<div class="block">
 			<h5>Tenant Data</h5>
 			<p>Optional. You can query this data from our API later.</p>
@@ -103,7 +127,7 @@
 				/>
 			</div>
 		</div>
-	</div>
+	</div> -->
 	<div class="block bottom-margin">
 		<div class="block">
 			<h5>Redirects</h5>
@@ -115,17 +139,43 @@
 		{#each data.redirects as redir, index}
 			<div class="block redirect-form-row">
 				<div class="redirect-from">
-					<TextInput bind:value={redir.from} labelText="From" placeholder="/logo" />
+					<Validator
+						value={redir.from}
+						fn={redirectFromValidator}
+						let:onBlur
+						let:invalid
+						let:invalidText
+					>
+						<TextInput
+							bind:value={redir.from}
+							labelText="From"
+							placeholder="/logo"
+							on:blur={onBlur}
+							{invalid}
+							{invalidText}
+						/>
+					</Validator>
 				</div>
 				<div>
 					<ArrowRight16 style="position:relative; top:2.5em" />
 				</div>
 				<div class="redirect-to">
-					<TextInput
-						bind:value={redir.to}
-						labelText="To"
-						placeholder="https://s3.aws.com/example-customer-logo.png"
-					/>
+					<Validator
+						value={redir.to}
+						fn={redirectToValidator}
+						let:onBlur
+						let:invalid
+						let:invalidText
+					>
+						<TextInput
+							bind:value={redir.to}
+							labelText="To"
+							placeholder="https://s3.aws.com/example-customer-logo.png"
+							on:blur={onBlur}
+							{invalid}
+							{invalidText}
+						/>
+					</Validator>
 				</div>
 				<div class="row-inline-container">
 					<Button
@@ -142,50 +192,49 @@
 	</div>
 
 	<div class="block bottom-margin">
-		<div class="block">
-			<h5>Client Headers</h5>
-			<p>
-				Rewrite "downstream" headers. Downstream refers to the client making the call to this domain
-				(such as a user's browser). You might need to overwrite headers if you don't control the
-				server at the service address you listed above.
-			</p>
-		</div>
-		{#each data.headersDownstream as header, index}
-			<div class="block redirect-form-row">
-				<div class="header-name">
-					<TextInput
-						bind:value={header[0]}
-						labelText="Header Name"
-						placeholder="Access-Control-Allow-Origin"
-						required
-					/>
-				</div>
-				<div class="header-value">
-					<TextInput
-						bind:value={header[1]}
-						labelText="Header Value"
-						placeholder="*"
-						helperText="Mutiple values should be comma-delimited (no spaces)."
-						required
-					/>
-				</div>
-				<div class="row-inline-container">
-					<Button
-						kind="danger-tertiary"
-						size="field"
-						iconDescription="Delete"
-						icon={TrashCan16}
-						on:click={() => removeHeader(index)}
-					/>
-				</div>
-			</div>
-		{/each}
-		<Button kind="tertiary" size="field" on:click={addHeader}>+ Add A Header</Button>
-	</div>
-
-	<div class="block bottom-margin">
 		<Accordion>
 			<AccordionItem title="Advanced...">
+				<div class="block bottom-margin">
+					<div class="block">
+						<h5>Client Headers</h5>
+						<p>
+							Rewrite "downstream" headers. Downstream refers to the client making the call to this
+							domain (such as a user's browser). You might need to overwrite headers if you don't
+							control the server at the service address you listed above.
+						</p>
+					</div>
+					{#each data.headersDownstream as header, index}
+						<div class="block redirect-form-row">
+							<div class="header-name">
+								<TextInput
+									bind:value={header[0]}
+									labelText="Header Name"
+									placeholder="Access-Control-Allow-Origin"
+									required
+								/>
+							</div>
+							<div class="header-value">
+								<TextInput
+									bind:value={header[1]}
+									labelText="Header Value"
+									placeholder="*"
+									helperText="Mutiple values should be comma-delimited (no spaces)."
+									required
+								/>
+							</div>
+							<div class="row-inline-container">
+								<Button
+									kind="danger-tertiary"
+									size="field"
+									iconDescription="Delete"
+									icon={TrashCan16}
+									on:click={() => removeHeader(index)}
+								/>
+							</div>
+						</div>
+					{/each}
+					<Button kind="tertiary" size="field" on:click={addHeader}>+ Add A Header</Button>
+				</div>
 				<div class="block">
 					<div class="block">
 						<p>Enable this if you're running into HTTPS errors when using this domain.</p>
@@ -210,6 +259,10 @@
 		height: 64px;
 		display: flex;
 		align-items: flex-end;
+	}
+
+	.backend-address-container {
+		min-width: 45%;
 	}
 
 	.redirect-from {

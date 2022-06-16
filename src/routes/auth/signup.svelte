@@ -10,11 +10,11 @@
 	let password: string;
 
 	function onSubmit() {
-		// signIn.dispatch({ email, password });
-		backendCall<User, { email: string; password: string }>('/auth/signup', 'POST', {
-			email,
+		const data = {
+			email: email.trim().toLowerCase(),
 			password
-		})
+		};
+		backendCall<User, { email: string; password: string }>('/auth/signup', 'POST', data)
 			.then((result) => {
 				getCurrentUser.dispatch();
 				goto('/');

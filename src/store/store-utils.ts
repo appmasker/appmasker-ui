@@ -13,18 +13,19 @@ export const effectManager = <Entity, Payload = void>(
 			store.update((state) => {
 				return {
 					...state,
-					isLoading: true
+					isLoading: true,
+					isError: false
 				};
 			});
 			effect(payload)
 				.then((result) => {
-					store.set({ data: result?.data, isLoading: false });
+					store.set({ data: result?.data, isLoading: false, message: result?.message, isError: false });
 					afterEffect?.(result, true);
 					return result;
 				})
 				.catch((error) => {
 					console.error(error);
-					store.update((state) => ({ ...state, isLoading: false }));
+					store.update((state) => ({ ...state, isLoading: false, message: error?.message, isError: true }));
 					afterEffect?.(error, false);
 					return error;
 				});

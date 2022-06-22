@@ -35,6 +35,7 @@
 	let isSideNavOpen = false;
 	let links = [
 		{ text: 'Domains', href: '/dashboard/domains' },
+		{ text: 'Caddy Servers', href: '/dashboard/servers' },
 		// { text: 'Account', href: '/dashboard/account' },
 		{ text: 'API', href: '/dashboard/api' },
 		{ text: 'Billing', href: '/dashboard/billing' },

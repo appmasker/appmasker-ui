@@ -3,17 +3,31 @@
   margin-bottom: 1em;
 }
 
-	.actions-row {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-	}
+.block h4,
+.block p {
+  margin-bottom: 0.25em;
+}
+
+.form-small {
+  max-width: 215px;
+}
+
+.form-medium {
+  max-width: 325px;
+}
+
+.actions-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
 
 
 /* overrides */
 body {
   font-size: 16px;
 }
+
 b {
   font-weight: bold !important;
 }
@@ -22,23 +36,34 @@ ul.app {
   list-style: initial !important;
 }
 
-ul.app, ul.app > li {
+ul.app,
+ul.app>li {
   margin-left: 1rem !important;
   line-height: 1.2rem !important;
   font-size: initial !important;
 }
+
 .bx--side-nav~.bx--content {
   margin-left: 0 !important;
 }
 
-.bx--modal-container .bx--modal-header, .bx--modal-container .bx--modal-content, .bx--modal-container .bx--modal-content__regular-content  {
+.bx--modal-container .bx--modal-header,
+.bx--modal-container .bx--modal-content,
+.bx--modal-container .bx--modal-content__regular-content {
   padding-right: 1em !important;
 }
 
-input, textarea {
+input,
+textarea {
   font-size: max(1em, 16px) !important;
 }
 
 code {
-      font-size: 0.8rem !important;
+  font-size: 0.8rem !important;
+}
+
+.loading-row {
+  display: flex;
+  justify-content: flex-end;
+  margin-right: 2em;
 }

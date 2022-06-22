@@ -1,4 +1,4 @@
-import type { DomainPreset } from "src/types";
+import type { DomainPreset } from "../types";
 
 const calendlyPreset: DomainPreset = {
   name: 'calendly',

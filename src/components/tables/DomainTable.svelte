@@ -198,9 +198,4 @@
 		padding-top: 0.5em;
 		padding-bottom: 0.5em;
 	}
-	.loading-row {
-		display: flex;
-		justify-content: flex-end;
-		margin-right: 2em;
-	}
 </style>

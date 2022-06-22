@@ -1,21 +1,12 @@
 <script>
-	import {
-		Tabs,
-		Tab,
-		TabContent,
-		Tile,
-		Button,
-		Link,
-		CodeSnippet,
-		DataTable
-	} from 'carbon-components-svelte';
+	import { Button, CodeSnippet, Tile } from 'carbon-components-svelte';
+	import DocSection from '../../../components/DocSection.svelte';
 	import {
 		createDomainDocConfig,
 		deleteManyDomainsDocConfig,
 		editManyDomainsDocConfig,
 		getDomainDocConfig
 	} from '../../../utils/docs';
-	import DocSection from '../../../components/DocSection.svelte';
 
 	const tableHeaders = [
 		{ key: 'fieldName', value: 'Field Name' },

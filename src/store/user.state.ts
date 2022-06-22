@@ -8,6 +8,7 @@ export const showNotification$ = writable<{
 	message?: string;
 	kind?: NotificationType;
 	title?: string;
+	timeout?: number;
 }>({});
 
 type NotificationType = 'error' | 'info' | 'info-square' | 'success' | 'warning' | 'warning-alt';

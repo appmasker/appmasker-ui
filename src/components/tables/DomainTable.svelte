@@ -124,10 +124,10 @@
 
 		<div slot="expanded-row" let:row class="expanded-row">
 			<h5>Redirects</h5>
-			{#if row.redirects.length}
+			{#if row.redirects?.length}
 				{#each row.redirects as redir, i}
 					{formatRedirect(redir)}
-					{#if i !== row.redirects.length - 1}
+					{#if i !== (row.redirects.length || 0) - 1}
 						<br />
 					{/if}
 				{/each}
@@ -139,13 +139,13 @@
 		<div slot="cell" let:row let:cell>
 			<span>
 				{#if cell.key === 'data'}
-					{#if row.redirects.length}
+					{#if row.redirects?.length}
 						<ConfigDialog data={row} />
 					{:else}
 						None
 					{/if}
 				{:else if cell.key === 'redirects'}
-					{#if row.redirects.length}
+					{#if row.redirects?.length}
 						<Link style="cursor: pointer">Expand</Link>
 					{:else}
 						None

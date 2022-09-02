@@ -2,6 +2,7 @@
 	import { Button, Tile } from 'carbon-components-svelte';
 	import CheckmarkFilled16 from 'carbon-icons-svelte/lib/CheckmarkFilled16';
 	import CurrencyDollar32 from 'carbon-icons-svelte/lib/CurrencyDollar32';
+	import YourAccount from '../../components/YourAccount.svelte';
 	import { currentUser$ } from '../../store';
 	import { isSubscribed } from '../../utils/billing';
 	import { BACKEND_HOST, BUSINESS_STANDARD_PRICE_ID } from '../../utils/environment';
@@ -10,12 +11,7 @@
 <h1>Billing</h1>
 
 <div class="block">
-	<Tile>
-		<h3>Your Account</h3>
-		<p>
-			{$currentUser$?.data?.email}
-		</p>
-	</Tile>
+	<YourAccount />
 	<br />
 	<Tile>
 		<h3>Free Trial</h3>

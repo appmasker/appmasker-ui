@@ -6,8 +6,8 @@
 	import { backendCall } from '../../api';
 	import type { User } from '../../types';
 
-	let email: string;
-	let password: string;
+	let email = '';
+	let password = '';
 
 	function onSubmit() {
 		const data = {

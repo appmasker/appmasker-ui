@@ -16,7 +16,6 @@
 		};
 		backendCall<User, { email: string; password: string }>('/auth/signup', 'POST', data)
 			.then((result) => {
-				getCurrentUser.dispatch();
 				goto('/');
 			})
 			.catch((err) => {

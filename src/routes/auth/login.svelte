@@ -15,7 +15,6 @@
 			password
 		})
 			.then((result) => {
-				getCurrentUser.dispatch();
 				goto('/');
 			})
 			.catch((err) => {

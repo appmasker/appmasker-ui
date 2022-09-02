@@ -10,7 +10,6 @@ export const jsonPlaceholder = JSON.stringify(
 export const flyRegions: { label: string; id: FlyRegion; selected: boolean }[] = [
 	{ id: FlyRegion.AMSTERDAM, label: 'Amsterdam, Netherlands', selected: false },
 	{ id: FlyRegion.ASHBURN_VIRGINIA, label: 'Ashburn, Virginia', selected: false },
-	{ id: FlyRegion.ATLANTA, label: 'Atlanta, Georgia', selected: false },
 	// { id: FlyRegion.CHENNAI_INDIA, label: 'Chennai, India', selected: false },
 	{ id: FlyRegion.CHICAGO, label: 'Chicago, Illinois', selected: false },
 	{ id: FlyRegion.DALLAS, label: 'Dallas, Texas', selected: false },

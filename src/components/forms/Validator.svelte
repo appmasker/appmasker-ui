@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { ValidatorFunction } from 'src/utils/validators';
+	import type { ValidatorFunction } from '../../utils/validators';
 
 	export let value;
 	export let fn: ValidatorFunction<any>;

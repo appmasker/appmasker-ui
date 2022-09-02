@@ -9,11 +9,11 @@ export interface BackendResponse<T> {
 	errors: any[];
 }
 
-export const backendCall = <Entity, Body = void>(
+export const backendCall = <ResponseData, Body = void>(
 	url: string,
 	method: 'GET' | 'POST' | 'DELETE' | 'PUT' = 'GET',
 	body?: Body
-): Promise<BackendResponse<Entity>> =>
+): Promise<BackendResponse<ResponseData>> =>
 	fetch(`${host}${url}`, {
 		method,
 		body: body ? JSON.stringify(body) : undefined,

@@ -12,6 +12,7 @@
 		UnorderedList
 	} from 'carbon-components-svelte';
 	import CloudUpload32 from 'carbon-icons-svelte/lib/CloudUpload32';
+	import { products } from '../../utils/billing';
 	import { createEventDispatcher } from 'svelte';
 	import {
 		caddyFilePlaceholder,
@@ -21,18 +22,24 @@
 		validateForm
 	} from '../../routes/dashboard/servers/_utils';
 	import { launchServer$, showNotification$, updateServer$ } from '../../store';
-	import { Server, ServerConfigType, ServerInput } from '../../types';
+	import { Server, ServerConfigType, ServerInput, ServerTier } from '../../types';
 	import { flyRegions } from '../../utils/consts';
 	import AsyncButton from '../AsyncButton.svelte';
 	import CaddyServerHelp from '../dialogs/CaddyServerHelp.svelte';
 	import InlineMessage from '../indicators/InlineMessage.svelte';
+	import billingService from '../../services/billing-service';
+	import { accountServers$ } from '../../store';
 
 	export let server: Server = null;
 	export let isEdit = false;
+	export let tier: ServerTier = ServerTier.BASIC;
 
 	const dispatch = createEventDispatcher();
 
-	let data = serverToForm(server);
+	let data = isEdit
+		? serverToForm(server)
+		: JSON.parse(localStorage.getItem('caddy-form')) || serverToForm(server);
+
 	let selectedConfigTypeIndex = 0;
 	$: data.configType =
 		selectedConfigTypeIndex === 0 ? ServerConfigType.CADDYFILE : ServerConfigType.JSON;
@@ -47,6 +54,7 @@
 				kind: 'error'
 			});
 		} else {
+			localStorage.setItem('caddy-form', JSON.stringify(data));
 			dispatch('submit', {
 				name: data.name,
 				regions: regionDictToList(data.regions),
@@ -78,7 +86,9 @@
 						or <a href="https://caddyserver.com/docs/json/storage" target="_blank">storage</a>
 					</ListItem>
 					<ListItem>Configurable port range is 1-65535</ListItem>
-					<ListItem>We recommend listening on at least port 80 and 443</ListItem>
+					<ListItem
+						>We <strong>highly</strong> recommend listening on at least port 80 and 443</ListItem
+					>
 					<ListItem>Environment variables are not yet supported</ListItem>
 					<ListItem
 						>API access to managed Caddy deployments is undocumented. Let us know if you want API
@@ -115,7 +125,9 @@
 
 			<div class="block">
 				<h4>Regions</h4>
-				<p>Choose which regions to deploy your server ($99/region/month).</p>
+				<p>
+					Choose which regions to deploy your server (${products[tier].monthlyPrice}/region/month).
+				</p>
 				<div class="region-tile-grid" role="group" aria-label="selectable tiles">
 					{#each flyRegions as region}
 						<SelectableTile bind:selected={data.regions[region.id]} value={region.id}
@@ -129,7 +141,11 @@
 						hideCloseButton={true}
 						kind="info"
 						title="Your new price:"
-						subtitle={`$${Object.values(data?.regions).filter(Boolean).length * 99}.00 USD per
+						subtitle={`$${billingService.computeMonthlySubtotal(
+							tier,
+							$accountServers$.data,
+							Object.values(data.regions).filter(Boolean).length
+						)}.00 USD per
 			month`}
 					/>
 				{:else if !isEdit}
@@ -138,8 +154,12 @@
 						hideCloseButton={true}
 						kind="info"
 						title="Subtotal:"
-						subtitle={`$${Object.values(data?.regions).filter(Boolean).length * 99}.00 USD per
-					month`}
+						subtitle={`$${billingService.computeMonthlySubtotal(
+							tier,
+							$accountServers$.data,
+							Object.values(data.regions).filter(Boolean).length
+						)}.00 USD per
+					month (your first server & 1 region are on us 😊)`}
 					/>
 				{/if}
 			</div>
@@ -194,7 +214,6 @@
 			{/if}
 
 			<div class="block">
-				<p>You'll be prompted for billing info if none is on file.</p>
 				<AsyncButton
 					on:click={onSubmit}
 					isLoading={isEdit ? $updateServer$.isLoading : $launchServer$.isLoading}

@@ -2,6 +2,6 @@ export interface AsyncState<T> {
 	isLoading: boolean;
 	data: T;
 	message?: string;
-	isError: boolean;
+	isError?: boolean;
 	key?: string;
 }

@@ -3,3 +3,4 @@
 /.svelte-kit
 /build
 .env
+yarn-error.log

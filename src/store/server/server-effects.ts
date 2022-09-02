@@ -1,4 +1,5 @@
 import { goto } from "$app/navigation";
+import { derived } from "svelte/store";
 import { backendCall } from "../../api";
 import type { Server, ServerInput, ServerUpdateInput } from "../../types";
 import { effectManager } from "../store-utils";
@@ -18,6 +19,14 @@ export const getServers = effectManager<Server[]>(
     }
   }
 )
+
+export const regionCount = derived(getServers.store, $servers => {
+  console.log('servers', $servers)
+  const regionCount = $servers.data.reduce((prev, curr) => {
+    return prev + curr.regions.length;
+  }, 0);
+  return regionCount;
+});
 
 export const launchServer = effectManager<Server, ServerInput>(
   launchServer$,

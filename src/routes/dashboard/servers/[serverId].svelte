@@ -50,6 +50,7 @@
 	function onDeleteServer() {
 		openDeleteConfirm = false;
 		deleteServer.dispatch(server.id);
+		localStorage.removeItem('caddy-form');
 	}
 </script>
 

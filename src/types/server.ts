@@ -1,3 +1,5 @@
+import type { ServerTier } from "./products";
+
 export interface Server {
   id: string;
 
@@ -17,7 +19,9 @@ export interface Server {
 
   createdDate: Date;
 
-  app: ServerApp
+  app: ServerApp;
+
+  tier: ServerTier;
 
 }
 
@@ -78,7 +82,6 @@ export interface ServerInput {
 
 export enum FlyRegion {
   AMSTERDAM = 'ams',	// Amsterdam, Netherlands
-  ATLANTA = 'atl',	// Atlanta, Georgia (US)
   PARIS = 'cdg',	// Paris, France
   DALLAS = 'dfw',	// Dallas, Texas (US)
   PARSIPPANY_NJ = 'ewr',	// Parsippany, NJ (US)

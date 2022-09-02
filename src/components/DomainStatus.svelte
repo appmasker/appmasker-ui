@@ -9,7 +9,6 @@
 	export let status: DomainDNSRecordData;
 
 	$: dnsStatus = status ? chooseDNSStatus(status) : null;
-	console.log('status', status, dnsStatus);
 </script>
 
 {#if !dnsStatus}

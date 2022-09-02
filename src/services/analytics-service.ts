@@ -3,13 +3,15 @@ import type { AppEvent, User } from '../types';
 import { ENVIRONMENT, FULL_STORY_ORG_ID } from '../utils/environment';
 
 class AnalyticsService {
-  
+
   init() {
     this.fullStoryInit();
+    this.amplitudeInit();
   }
 
   setUser(user: User): void {
     this.fullStorySetUser(user);
+    this.amplitudeSetUser(user);
   }
 
   event<T>(appEvent: AppEvent, data: T) {
@@ -24,10 +26,18 @@ class AnalyticsService {
   }
 
   private fullStoryInit() {
-    FullStory.init({ 
+    FullStory.init({
       orgId: FULL_STORY_ORG_ID,
-      devMode: ENVIRONMENT !== 'production' ,
+      devMode: ENVIRONMENT !== 'production',
     });
+  }
+
+  private amplitudeSetUser(user: User) {
+    //  amplitude.identify({id: user})
+  }
+
+  private amplitudeInit() {
+    // amplitude.init(import.meta.env.VITE_AMPLITUDE_KEY as string);
   }
 
   private fullStoryEvent<T>(event: AppEvent, data: T) {

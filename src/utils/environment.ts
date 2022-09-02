@@ -10,3 +10,8 @@ export const APPMASKER_IPV6_ADDRESS =
 	ENVIRONMENT === 'production' ? '2a09:8280:1::933' : '2a09:8280:1::3:d43';
 
 export const FULL_STORY_ORG_ID = '16E170';
+
+export const getAppHost = (): string => {
+	const host = ENVIRONMENT === 'production' ? 'https://app.appmasker.com' : 'https://dev.appmasker.com';
+	return host;
+}

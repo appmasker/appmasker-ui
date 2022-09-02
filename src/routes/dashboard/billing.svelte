@@ -6,6 +6,18 @@
 	import { currentUser$ } from '../../store';
 	import { isSubscribed } from '../../utils/billing';
 	import { BACKEND_HOST, BUSINESS_STANDARD_PRICE_ID } from '../../utils/environment';
+	import { page } from '$app/stores';
+	import { backendCall } from '../../api';
+
+	const priceId = $page.query.get('checkout');
+	console.log();
+	if (priceId) {
+		try {
+			backendCall(`/stripe/create-checkout-session/${priceId}`, 'POST');
+		} catch (error) {
+			console.error('failed to make stripe session', error);
+		}
+	}
 </script>
 
 <h1>Billing</h1>
@@ -59,11 +71,6 @@
 </div>
 
 <style>
-	.stripe-logo {
-		height: 3em;
-		width: auto;
-	}
-
 	.subscribed {
 		display: flex;
 		align-items: center;

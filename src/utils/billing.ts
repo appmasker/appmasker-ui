@@ -1,4 +1,4 @@
-import { AccountType } from '../types';
+import { AccountType, ProductDetails, ServerTier } from '../types';
 
 export const isSubscribed = (accountType: AccountType): boolean => {
 	switch (accountType) {
@@ -7,5 +7,12 @@ export const isSubscribed = (accountType: AccountType): boolean => {
 			return true;
 		default:
 			return false;
+	}
+};
+
+
+export const products: { [key in ServerTier]: ProductDetails } = {
+	[ServerTier.BASIC]: {
+		monthlyPrice: 99
 	}
 };

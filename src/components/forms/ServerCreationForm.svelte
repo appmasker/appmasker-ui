@@ -144,7 +144,8 @@
 						subtitle={`$${billingService.computeMonthlySubtotal(
 							tier,
 							$accountServers$.data,
-							Object.values(data.regions).filter(Boolean).length
+							Object.values(data.regions).filter(Boolean).length,
+							server.id
 						)}.00 USD per
 			month`}
 					/>
@@ -178,6 +179,14 @@
 					/>
 					<CaddyServerHelp />
 				</div>
+				{#if !isEdit}
+					<div class="block">
+						<p>
+							<strong>DNS:</strong>&nbsp;After launching this server, its IP addresses will be
+							generated for you to point your DNS records.
+						</p>
+					</div>
+				{/if}
 			</div>
 			{#if data.configType === ServerConfigType.CADDYFILE}
 				<div class="block">

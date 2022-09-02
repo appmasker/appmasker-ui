@@ -1,15 +1,52 @@
 <script lang="ts">
 	import { page } from '$app/stores';
+	import { Stripe, loadStripe } from '@stripe/stripe-js';
 	import { Button, Tile } from 'carbon-components-svelte';
+	import { onMount } from 'svelte';
 
-	const checkoutSecret = $page.query.get('checkoutSecret');
+	let clientSecret = $page.query.get('setup_intent_client_secret');
+	let message = 'Loading...';
+	let stripe: Stripe = null;
+
+	onMount(async () => {
+		stripe = await loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY as string);
+		stripe.retrieveSetupIntent(clientSecret).then(({ setupIntent }) => {
+			// Inspect the SetupIntent `status` to indicate the status of the payment
+			// to your customer.
+			//
+			// Some payment methods will [immediately succeed or fail][0] upon
+			// confirmation, while others will first enter a `processing` state.
+			//
+			// [0]: https://stripe.com/docs/payments/payment-methods#payment-notification
+			switch (setupIntent.status) {
+				case 'succeeded': {
+					message = 'Success! Your payment method has been saved securely.';
+					break;
+				}
+
+				case 'processing': {
+					message = "Processing payment details. We'll update you when processing is complete.";
+					break;
+				}
+
+				case 'requires_payment_method': {
+					message = 'Failed to process payment details. Please try another payment method.';
+
+					// Redirect your user back to your payment page to attempt collecting
+					// payment again
+
+					break;
+				}
+			}
+		});
+	});
 </script>
 
 <h1>Billing</h1>
 
 <div class="block">
 	<Tile>
-		<h3>Your Payment Method was stored securely.</h3>
+		<h3>{message}</h3>
 		<br />
 		<p>You will be billed at an hourly rate at the conclusion of each month.</p>
 		<p>

@@ -5,7 +5,13 @@
 	import ServerCreationForm from '../../../components/forms/ServerCreationForm.svelte';
 	import { ServerInput, ServerTier } from '../../../types';
 	import billingService from '../../../services/billing-service';
-	import { getServers, accountServers$, launchServer, regionCount } from '../../../store';
+	import {
+		getServers,
+		accountServers$,
+		launchServer,
+		regionCount,
+		getCurrentUser
+	} from '../../../store';
 
 	let billingDialogIsOpen = false;
 	let price: number = 0;
@@ -15,21 +21,23 @@
 
 	function onSubmit(submission: CustomEvent<ServerInput>): void {
 		console.log('submission', submission);
-		console.log('plan active', billingService.planIsActive());
+		console.log('account good', billingService.accountIsGood());
 		console.log('req payment', $regionCount);
-		const newRegionCount = $regionCount + submission.detail.regions.length;
-		if (billingService.planIsActive() || newRegionCount <= 1) {
-			launchServer.dispatch(submission.detail);
-			localStorage.removeItem('caddy-form');
-		} else {
-			// set the price for the billing dialog
-			price = billingService.computeMonthlySubtotal(
-				tier,
-				$accountServers$.data,
-				submission.detail.regions.length
-			);
-			billingDialogIsOpen = true;
-		}
+		getCurrentUser.dispatch(null, (err) => {
+			const newRegionCount = $regionCount + submission.detail.regions.length;
+			if (billingService.accountIsGood() || newRegionCount <= 1) {
+				launchServer.dispatch(submission.detail);
+				localStorage.removeItem('caddy-form');
+			} else {
+				// set the price for the billing dialog
+				price = billingService.computeMonthlySubtotal(
+					tier,
+					$accountServers$.data,
+					submission.detail.regions.length
+				);
+				billingDialogIsOpen = true;
+			}
+		});
 	}
 </script>
 

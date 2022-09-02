@@ -10,28 +10,33 @@
 	let elements: StripeElements = null;
 	let errorMessage = null;
 	let isLoadingSubmit = false;
-	async function onPaymentSubmit() {
+
+	function onPaymentSubmit() {
 		if (!stripe?.elements) {
 			return;
 		}
 		isLoadingSubmit = true;
-		const { error } = await stripe.confirmSetup({
-			//`Elements` instance that was used to create the Payment Element
-			elements,
-			confirmParams: {
-				return_url: `${getAppHost()}/dashboard/billing/setup-complete`
-			}
-		});
-		if (error) {
-			// This point will only be reached if there is an immediate error when
-			// confirming the payment. Show error to your customer (for example, payment
-			// details incomplete)
-			errorMessage = error.message;
-		} else {
-			// Your customer will be redirected to your `return_url`. For some payment
-			// methods like iDEAL, your customer will be redirected to an intermediate
-			// site first to authorize the payment, then redirected to the `return_url`.
-		}
+		stripe
+			.confirmSetup({
+				//`Elements` instance that was used to create the Payment Element
+				elements,
+				confirmParams: {
+					return_url: `${window.location.origin}/dashboard/billing/setup-complete`
+				}
+			})
+			.then(({ error }) => {
+				if (error) {
+					// This point will only be reached if there is an immediate error when
+					// confirming the payment. Show error to your customer (for example, payment
+					// details incomplete)
+					errorMessage = error.message;
+				} else {
+					// Your customer will be redirected to your `return_url`. For some payment
+					// methods like iDEAL, your customer will be redirected to an intermediate
+					// site first to authorize the payment, then redirected to the `return_url`.
+				}
+				isLoadingSubmit = false;
+			});
 	}
 
 	onMount(async () => {

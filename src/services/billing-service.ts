@@ -15,11 +15,20 @@ class BillingService {
     return planExpiration > new Date();
   }
 
-  computeMonthlySubtotal(tier: ServerTier, currentServers: Server[], newRegions: number): number {
-    const defaultVal = newRegions * (products[tier] as ProductDetails).monthlyPrice;
+  accountIsGood(): boolean {
+    return this.planIsActive() || !!this.userInfo.account.paymentMethodId;
+  }
 
+  computeMonthlySubtotal(tier: ServerTier, currentServers: Server[], newRegions: number, editingId?: string): number {
+    const defaultVal = newRegions * (products[tier] as ProductDetails).monthlyPrice;
+    console.log('default', defaultVal)
+    console.log('tier', tier)
+    console.log('current servers', currentServers)
+    console.log('new regions', newRegions);
     if (tier === ServerTier.BASIC) {
-      if (currentServers.filter(s => s.tier === ServerTier.BASIC).length) {
+      const otherBasicServersCount = currentServers.filter(s => s.tier === ServerTier.BASIC && s.id !== editingId).length;
+      console.log('others', otherBasicServersCount)
+      if (otherBasicServersCount) {
         return defaultVal;
       } else {
         return Math.max(defaultVal - products[ServerTier.BASIC].monthlyPrice, 0);

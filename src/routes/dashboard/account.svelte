@@ -1,23 +1,26 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
-
-	import { session } from '$app/stores';
-
-	import { Button, Form, Link, PasswordInput, TextInput, Tile } from 'carbon-components-svelte';
+	import { Button, Tile } from 'carbon-components-svelte';
 	import { backendCall } from '../../api';
-	import type { AppSession, User } from '../../types';
+	import YourAccount from '../../components/YourAccount.svelte';
+	import { BACKEND_HOST } from '../../utils/environment';
 
-	// function logout() {
-	//   backendCall('/')
-	// }
+	function logout() {
+		backendCall('/auth/logout', 'POST').then;
+	}
 </script>
 
 <h1>Account</h1>
 
 <div class="block">
-	<!-- <Tile>
-		<Button on:click=></Button>
-	</Tile> -->
+	<YourAccount />
+</div>
+
+<div class="block">
+	<Tile>
+		<form action={`${BACKEND_HOST}/auth/logout`} method="post">
+			<Button on:click={logout} kind="tertiary" type="submit">Log Out</Button>
+		</form>
+	</Tile>
 </div>
 
 <style>

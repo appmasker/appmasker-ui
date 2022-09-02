@@ -83,10 +83,13 @@
 		</Tile>
 	{/if}
 </div>
-<div class="block">
-	<DomainTable
-		rows={$accountDomains$.data.domains}
-		dnsStatus={$dnsStatus$.data}
-		isLoading={$accountDomains$.isLoading}
-	/>
-</div>
+
+{#if accountDomains$ && dnsStatus$ && accountDomains$}
+	<div class="block">
+		<DomainTable
+			rows={$accountDomains$.data.domains}
+			dnsStatus={$dnsStatus$.data}
+			isLoading={$accountDomains$.isLoading}
+		/>
+	</div>
+{/if}

@@ -5,8 +5,8 @@
 	import { backendCall } from '../../api';
 	import type { User } from '../../types';
 
-	let email: string;
-	let password: string;
+	let email = '';
+	let password = '';
 
 	function onSubmit() {
 		// signIn.dispatch({ email, password });
@@ -34,7 +34,7 @@
 			<PasswordInput bind:value={password} required labelText="Password" />
 			<div class="actions-row">
 				<Button type="submit">Log In</Button>
-				<Link kind="tertiary" href="/auth/signup">Register</Link>
+				<Link kind="tertiary" href="/auth/signup">Create an Account</Link>
 			</div>
 		</Form>
 	</Tile>

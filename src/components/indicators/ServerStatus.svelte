@@ -57,10 +57,4 @@
 	.server-status {
 		display: flex;
 	}
-	.fail-svg svg {
-		fill: red !important;
-	}
-	.good-svg svg {
-		fill: green !important;
-	}
 </style>

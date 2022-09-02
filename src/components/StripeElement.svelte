@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { loadStripe, Stripe, StripeElements } from '@stripe/stripe-js';
+	import CurrencyDollar32 from 'carbon-icons-svelte/lib/CurrencyDollar32';
+	import { STRIPE_PUBLIC_KEY } from '../utils/environment';
 	import { onMount } from 'svelte';
 	import { backendCall } from '../api';
-	import { getAppHost } from '../utils/environment';
 	import AsyncButton from './AsyncButton.svelte';
-	import CurrencyDollar32 from 'carbon-icons-svelte/lib/CurrencyDollar32';
 
 	let stripe: Stripe = null;
 	let elements: StripeElements = null;
@@ -40,7 +40,7 @@
 	}
 
 	onMount(async () => {
-		stripe = await loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY as string);
+		stripe = await loadStripe(STRIPE_PUBLIC_KEY);
 		const clientSecret = (
 			await backendCall<{ checkoutSecret: string }>('/stripe/create-setup-intent', 'POST')
 		).data?.checkoutSecret;

@@ -46,6 +46,7 @@
 			id: server.id,
 			...form
 		});
+		localStorage.removeItem('caddy-form');
 	}
 	function onDeleteServer() {
 		openDeleteConfirm = false;

@@ -2,6 +2,7 @@
 	import { page } from '$app/stores';
 	import { Stripe, loadStripe } from '@stripe/stripe-js';
 	import { Button, Tile } from 'carbon-components-svelte';
+	import { STRIPE_PUBLIC_KEY } from '../../../utils/environment';
 	import { onMount } from 'svelte';
 
 	let clientSecret = $page.query.get('setup_intent_client_secret');
@@ -9,7 +10,7 @@
 	let stripe: Stripe = null;
 
 	onMount(async () => {
-		stripe = await loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY as string);
+		stripe = await loadStripe(STRIPE_PUBLIC_KEY);
 		stripe.retrieveSetupIntent(clientSecret).then(({ setupIntent }) => {
 			// Inspect the SetupIntent `status` to indicate the status of the payment
 			// to your customer.

@@ -36,10 +36,11 @@
 			<h3>Introduction</h3>
 			<p class="block">
 				AppMasker uses a simple REST API for programatic configuration. API's are available at <CodeSnippet
-					type="inline">https://app.appmasker.com</CodeSnippet
-				>. For example, if you wanted to create a domain, the url would be a <code>POST</code> call
+					type="inline"
+					code="https://api.appmasker.com"
+				/>. For example, if you wanted to create a domain, the url would be a <code>POST</code> call
 				to
-				<CodeSnippet type="inline">https://app.appmasker.com/domain</CodeSnippet>.
+				<CodeSnippet code="https://api.appmasker.com/domain" type="inline" />.
 			</p>
 			<h4>Response Payloads</h4>
 			<p>All response payloads are JSON objects with the following structure:</p>

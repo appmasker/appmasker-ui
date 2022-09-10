@@ -29,6 +29,7 @@
 	import InlineMessage from '../indicators/InlineMessage.svelte';
 	import billingService from '../../services/billing-service';
 	import { accountServers$ } from '../../store';
+	import Tooltip from '../Tooltip.svelte';
 
 	export let server: Server = null;
 	export let isEdit = false;
@@ -59,9 +60,7 @@
 				name: data.name,
 				regions: regionDictToList(data.regions),
 				uriEncodedCaddyfile:
-					data.configType === ServerConfigType.CADDYFILE
-						? encodeURIComponent(data.caddyFileConfig)
-						: undefined,
+					data.configType === ServerConfigType.CADDYFILE ? data.caddyFileConfig : undefined,
 				caddyJSONConfig:
 					data.configType === ServerConfigType.JSON ? JSON.parse(data.caddyJSONConfig) : undefined
 			} as ServerInput);
@@ -124,7 +123,18 @@
 			</div>
 
 			<div class="block">
-				<h4>Regions</h4>
+				<div class="region-title-container">
+					<h4>Regions</h4>
+					<Tooltip>
+						<p>Regions are redundant instances of Caddy, each with the same config.</p>
+						<p>🔒 They share their TLS certificate storage backend for efficiency.</p>
+						<p>
+							🌎 Anycast DNS will automatically choose the closest instance when a user makes a
+							request.
+						</p>
+						<p>🚀 Chose regions close to your customers for optimal performance!</p>
+					</Tooltip>
+				</div>
 				<p>
 					Choose which regions to deploy your server (${products[tier].monthlyPrice}/region/month).
 				</p>
@@ -249,5 +259,11 @@
 		gap: 2em;
 		width: 500px;
 		max-width: 100%;
+	}
+
+	.region-title-container {
+		display: flex;
+		gap: 15px;
+		align-items: center;
 	}
 </style>

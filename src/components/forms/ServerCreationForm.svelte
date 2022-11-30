@@ -132,7 +132,7 @@
 							🌎 Anycast DNS will automatically choose the closest instance when a user makes a
 							request.
 						</p>
-						<p>🚀 Chose regions close to your customers for optimal performance!</p>
+						<p>🚀 Choose regions close to your customers for optimal performance!</p>
 					</Tooltip>
 				</div>
 				<p>
@@ -189,14 +189,6 @@
 					/>
 					<CaddyServerHelp />
 				</div>
-				{#if !isEdit}
-					<div class="block">
-						<p>
-							<strong>DNS:</strong>&nbsp;After launching this server, its IP addresses will be
-							generated for you to point your DNS records.
-						</p>
-					</div>
-				{/if}
 			</div>
 			{#if data.configType === ServerConfigType.CADDYFILE}
 				<div class="block">
@@ -231,6 +223,15 @@
 					/>
 				</div>
 			{/if}
+
+			<div class="block">
+				<InlineNotification
+					title="DNS: "
+					subtitle="After launching, the IP addresses will be generated for you to point your domains' DNS records."
+					kind="warning"
+					hideCloseButton
+				/>
+			</div>
 
 			<div class="block">
 				<AsyncButton

@@ -5,6 +5,7 @@
 		Dropdown,
 		Form,
 		InlineNotification,
+		Link,
 		ListItem,
 		SelectableTile,
 		TextArea,
@@ -22,7 +23,7 @@
 		validateForm
 	} from '../../routes/dashboard/servers/_utils';
 	import { launchServer$, showNotification$, updateServer$ } from '../../store';
-	import { Server, ServerConfigType, ServerInput, ServerTier } from '../../types';
+	import { Server, ServerConfigType, ServerForm, ServerInput, ServerTier } from '../../types';
 	import { flyRegions } from '../../utils/consts';
 	import AsyncButton from '../AsyncButton.svelte';
 	import CaddyServerHelp from '../dialogs/CaddyServerHelp.svelte';
@@ -30,6 +31,7 @@
 	import billingService from '../../services/billing-service';
 	import { accountServers$ } from '../../store';
 	import Tooltip from '../Tooltip.svelte';
+	import CaddyPluginForm from './CaddyPluginForm.svelte';
 
 	export let server: Server = null;
 	export let isEdit = false;
@@ -37,7 +39,7 @@
 
 	const dispatch = createEventDispatcher();
 
-	let data = isEdit
+	let data: ServerForm = isEdit
 		? serverToForm(server)
 		: JSON.parse(localStorage.getItem('caddy-form')) || serverToForm(server);
 
@@ -47,6 +49,7 @@
 
 	function onSubmit() {
 		const validation = validateForm(data);
+		console.log('data', validation, data);
 		const invalidText = Object.values(validation).find(Boolean);
 		if (invalidText) {
 			showNotification$.set({
@@ -72,10 +75,16 @@
 	<Accordion align="start" size="xl">
 		<AccordionItem title="">
 			<svelte:fragment slot="title">
-				<h5>Limitations to our managed Caddy instances</h5>
+				<h5>Important info about our managed Caddy instances</h5>
 			</svelte:fragment>
 			<p style="margin-left: 20px">
 				<UnorderedList>
+					<ListItem
+						>We're currently deploying
+						<Link href="https://github.com/caddyserver/caddy/releases/tag/v2.6.0" target="_blank">
+							Caddy v2.6.0
+						</Link>
+					</ListItem>
 					<ListItem>No custom modules yet</ListItem>
 
 					<ListItem>
@@ -85,9 +94,7 @@
 						or <a href="https://caddyserver.com/docs/json/storage" target="_blank">storage</a>
 					</ListItem>
 					<ListItem>Configurable port range is 1-65535</ListItem>
-					<ListItem
-						>We <strong>highly</strong> recommend listening on at least port 80 and 443</ListItem
-					>
+					<ListItem>Ports other than 80 and 443 are not yet supported.</ListItem>
 					<ListItem>Environment variables are not yet supported</ListItem>
 					<ListItem
 						>API access to managed Caddy deployments is undocumented. Let us know if you want API
@@ -96,12 +103,8 @@
 				</UnorderedList>
 			</p>
 			<p class="block">
-				If you'd like to request a Caddy module to be supported or an advanced use case, email us at
-				<a
-					target="_blank"
-					href="mailto:support@appmasker.com?subject=Help%20with%20Caddy%20configuration&body=Hi!%20I%20need%20help%20writing%20a%20Caddy%20config%20file.%20Here%20is%20my%20use-case%3A"
-				>
-					support@appmasker.com</a
+				If you'd like to request a Caddy module to be supported or an advanced use case, <Link
+					href="/dashboard/help">let us know!</Link
 				>.
 			</p>
 		</AccordionItem>
@@ -223,6 +226,17 @@
 					/>
 				</div>
 			{/if}
+
+			<div class="block">
+				<Accordion align="start">
+					<AccordionItem>
+						<svelte:fragment slot="title">
+							<h5>Caddy Plugins</h5>
+						</svelte:fragment>
+						<CaddyPluginForm bind:plugins={data.plugins} readonly={isEdit} />
+					</AccordionItem>
+				</Accordion>
+			</div>
 
 			<div class="block">
 				<InlineNotification

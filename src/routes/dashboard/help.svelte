@@ -14,7 +14,16 @@
 				>
 					support@appmasker.com</Link
 				>
+				or send us a Tweet:
 			</p>
+			<br />
+			<a
+				class="twitter-timeline"
+				data-width="350"
+				data-height="600"
+				data-theme="light"
+				href="https://twitter.com/AppMasker?ref_src=twsrc%5Etfw">Tweets by AppMasker</a
+			> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 		</div>
 	</Tile>
 </div>

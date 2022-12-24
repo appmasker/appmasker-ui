@@ -1,5 +1,6 @@
 import { flyRegions } from "../../../utils/consts";
 import { FlyRegion, Server, ServerConfigType, ServerForm } from "../../../types";
+import { goModuleValidator } from "../../../utils/validators";
 
 export const validateForm = (form: ServerForm): { [field: string]: string | null } => {
   const validation: { [field: string]: string | null } = {};
@@ -16,6 +17,9 @@ export const validateForm = (form: ServerForm): { [field: string]: string | null
   if (form.configType === ServerConfigType.JSON && !form.caddyJSONConfig) {
     validation['caddyJSONConfig'] = 'Please enter a Caddy JSON config';
   }
+  if (form.plugins.some(goModuleValidator)) {
+    validation['plugins'] = 'Please enter valid Caddy plugin Go module paths, or delete them';
+  }
 
   return validation;
 }
@@ -30,7 +34,8 @@ export const serverToForm = (server: Server): ServerForm => {
       name: server.name ?? '',
       caddyFileConfig: server.configType === ServerConfigType.CADDYFILE ? server.configFile as string : '',
       caddyJSONConfig: server.configFile === ServerConfigType.JSON ? typeof server.configFile === 'string' ? server.configFile : JSON.stringify(server.configFile) : '',
-      configType: server.configType
+      configType: server.configType,
+      plugins: server.plugins || []
     }
   } else {
     return {
@@ -38,7 +43,8 @@ export const serverToForm = (server: Server): ServerForm => {
       regions: {} as Record<FlyRegion, boolean>,
       caddyFileConfig: '',
       caddyJSONConfig: '',
-      configType: ServerConfigType.CADDYFILE
+      configType: ServerConfigType.CADDYFILE,
+      plugins: []
     }
   }
 };

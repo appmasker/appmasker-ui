@@ -20,9 +20,6 @@
 	getServers.dispatch();
 
 	function onSubmit(submission: CustomEvent<ServerInput>): void {
-		console.log('submission', submission);
-		console.log('account good', billingService.accountIsGood());
-		console.log('req payment', $regionCount);
 		getCurrentUser.dispatch(null, (err) => {
 			const newRegionCount = $regionCount + submission.detail.regions.length;
 			if (billingService.accountIsGood() || newRegionCount <= 1) {

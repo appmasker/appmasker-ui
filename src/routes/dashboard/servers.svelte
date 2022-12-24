@@ -66,7 +66,7 @@
 							<CodeSnippet type="inline" code={row.ipv6Address} feedback="Copied to clipboard!" />
 						</div>
 					{:else if cell.key === 'status'}
-						<ServerStatus status={row.app?.status} state={row.app?.state} />
+						<ServerStatus server={row} />
 					{:else if cell.key === 'regions'}
 						{cell.value.length}
 					{:else if cell.key === 'createdDate'}

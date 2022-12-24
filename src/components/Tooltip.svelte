@@ -1,7 +1,8 @@
 <script>
 	import { Tooltip } from 'carbon-components-svelte';
 
-	export let text = `What's this?`;
+	export let text = '';
+
 	let open = false;
 </script>
 

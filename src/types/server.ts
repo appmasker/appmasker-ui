@@ -23,9 +23,33 @@ export interface Server {
 
   tier: ServerTier;
 
+  status: ServerStatus;
+
+  error?: string;
+
+  plugins: string[];
 }
 
 export enum ServerStatus {
+  PREPARING = 'preparing',
+
+  // builder steps
+  IMAGE_PREPARING = 'image_preparing',
+  IMAGE_BUILDING = 'image_building',
+  IMAGE_PUSHING = 'image_pushing',
+
+  DEPLOYING = 'deploying',
+
+  // config steps
+  CONFIG_INITIALIZING = 'config_initializing',
+  CONFIG_LOADING = 'config_loading',
+
+  GOOD = 'good',
+  ERROR = 'error'
+}
+
+
+export enum ServerDisplayStatus {
   UNKNOWN = 'unknown',
   PENDING = 'pending',
   GOOD = 'good',
@@ -63,6 +87,7 @@ export interface ServerForm {
   caddyFileConfig: string;
   caddyJSONConfig: string;
   configType: ServerConfigType;
+  plugins: string[];
 }
 
 export interface ServerUpdateInput {
@@ -71,6 +96,7 @@ export interface ServerUpdateInput {
   name?: string;
   uriEncodedCaddyfile?: string;
   caddyJSONConfig?: Object;
+  plugins: string[];
 }
 
 export interface ServerInput {
@@ -78,6 +104,7 @@ export interface ServerInput {
   name: string;
   uriEncodedCaddyfile?: string;
   caddyJSONConfig?: Object;
+  plugins: [];
 }
 
 export enum FlyRegion {

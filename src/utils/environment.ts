@@ -2,7 +2,17 @@ export const ENVIRONMENT = import.meta.env.VITE_ENVIRONMENT as 'development' | '
 
 export const BACKEND_HOST = import.meta.env.VITE_BACKEND as string;
 
+/**
+ * @deprecated This price value is deprecated. Use `PRICES`
+ */
 export const BUSINESS_STANDARD_PRICE_ID = import.meta.env.VITE_BUSINESS_PLAN_PRICE_ID as string;
+
+export const PRICES = {
+	DOMAIN_STANDARD_MONTHLY: {
+		development: 'price_1MhoAOHZNZE3BaVXrFmERNvk',
+		production: 'price_1Mi2I5HZNZE3BaVXLb17H5D9'
+	},
+}
 
 export const STRIPE_PUBLIC_KEY = import.meta.env.VITE_STRIPE_PUBLIC_KEY as string;
 

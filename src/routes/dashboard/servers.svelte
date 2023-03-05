@@ -10,6 +10,7 @@
 		ToolbarContent
 	} from 'carbon-components-svelte';
 	import Edit from 'carbon-icons-svelte/lib/Edit16';
+	import Renew from 'carbon-icons-svelte/lib/Renew16';
 	import { formatRelative } from 'date-fns';
 	import { onMount } from 'svelte';
 	import CaddyServerHelp from '../../components/dialogs/CaddyServerHelp.svelte';
@@ -17,7 +18,7 @@
 	import { accountServers$, getServers } from '../../store';
 
 	onMount(() => {
-		getServers.dispatch();
+		loadServers();
 	});
 
 	const headers: { key: string; value: string | number }[] = [
@@ -31,6 +32,10 @@
 
 	function selectRow(id: string) {
 		goto(`/dashboard/servers/${id}`);
+	}
+
+	function loadServers() {
+		getServers.dispatch();
 	}
 </script>
 
@@ -47,6 +52,12 @@
 		<DataTable class="server-table" size="tall" {headers} rows={$accountServers$.data}>
 			<Toolbar>
 				<ToolbarContent>
+					<Button
+						iconDescription="Reload Server Data"
+						on:click={loadServers}
+						kind="ghost"
+						icon={Renew}
+					/>
 					{#if !$accountServers$.isLoading}
 						<Button href="servers/create">+ Create a Server</Button>
 					{:else}

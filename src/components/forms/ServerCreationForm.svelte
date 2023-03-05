@@ -85,7 +85,6 @@
 							Caddy v2.6.0
 						</Link>
 					</ListItem>
-					<ListItem>No custom modules yet</ListItem>
 
 					<ListItem>
 						You can't configure <a href="https://caddyserver.com/docs/json/admin" target="_blank"
@@ -93,7 +92,6 @@
 						>
 						or <a href="https://caddyserver.com/docs/json/storage" target="_blank">storage</a>
 					</ListItem>
-					<ListItem>Configurable port range is 1-65535</ListItem>
 					<ListItem>Ports other than 80 and 443 are not yet supported.</ListItem>
 					<ListItem>Environment variables are not yet supported</ListItem>
 					<ListItem
@@ -103,8 +101,8 @@
 				</UnorderedList>
 			</p>
 			<p class="block">
-				If you'd like to request a Caddy module to be supported or an advanced use case, <Link
-					href="/dashboard/help">let us know!</Link
+				If you have an advanced use case we're not supporting, <Link href="/dashboard/help"
+					>let us know!</Link
 				>.
 			</p>
 		</AccordionItem>

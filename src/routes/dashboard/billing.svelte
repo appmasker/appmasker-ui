@@ -5,7 +5,7 @@
 	import YourAccount from '../../components/YourAccount.svelte';
 	import { currentUser$ } from '../../store';
 	import { isSubscribed } from '../../utils/billing';
-	import { BACKEND_HOST, BUSINESS_STANDARD_PRICE_ID } from '../../utils/environment';
+	import { BACKEND_HOST, ENVIRONMENT, PRICES } from '../../utils/environment';
 	import { page } from '$app/stores';
 	import { backendCall } from '../../api';
 
@@ -34,21 +34,16 @@
 	</Tile>
 	<br />
 	<Tile>
-		<h3>Business - $50/mo</h3>
+		<h3>Business - $49/month</h3>
 		<ul class="block app">
 			<li>Includes 10 domains</li>
-			<li>Additional domains at $3 / domain per month</li>
-			<li>Refunds and deleted domains will be prorated</li>
-			<li>All charges are made annually.</li>
-			<li>
-				For example, if you request an 11th domain 6 months into your billing cycle, you'll be
-				charged $18 ($3 x 12 months x 0.5)
-			</li>
+			<li>Additional domains at $2.99 / domain / month</li>
+			<li>Domain count is assessed monthly at the billing cycle conclusion</li>
 		</ul>
 
 		{#if !isSubscribed($currentUser$?.data?.account?.type)}
 			<form
-				action={`${BACKEND_HOST}/stripe/create-checkout-session/${BUSINESS_STANDARD_PRICE_ID}`}
+				action={`${BACKEND_HOST}/stripe/create-checkout-session/${PRICES.DOMAIN_STANDARD_MONTHLY[ENVIRONMENT]}`}
 				method="POST"
 			>
 				<div class="block">

@@ -29,6 +29,7 @@
 	import analyticsService from '../services/analytics-service';
 	import { getCurrentUser } from '../store';
 	import { onMount } from 'svelte';
+	import { ENVIRONMENT } from '../utils/environment';
 
 	export let isAuthenticated = false;
 
@@ -42,6 +43,9 @@
 		{ text: 'Help', href: '/dashboard/help' }
 	];
 
+	if (ENVIRONMENT === 'production') {
+		links = links.filter((link) => !link.text.includes('Caddy'));
+	}
 	onMount(() => {
 		if (isAuthenticated) {
 			getCurrentUser.dispatch();

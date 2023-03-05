@@ -242,6 +242,16 @@
 
 					<Checkbox labelText="Ignore TLS Insecure Verify" bind:checked={data.skipTLSVerify} />
 				</div>
+				<div class="block">
+					<div class="block">
+						<p>
+							Checking this allows you to navigate to http://yourdomain.com without automatically
+							redirecting to https://
+						</p>
+					</div>
+
+					<Checkbox labelText="Disable Automatic HTTPS" bind:checked={data.disableAutoHttps} />
+				</div>
 			</AccordionItem>
 		</Accordion>
 	</div>

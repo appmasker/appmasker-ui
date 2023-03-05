@@ -107,13 +107,14 @@ export const redirectsValidator = (redirects: Redirect[]): Array<string | null> 
 export type DomainFormValidation = Record<keyof IDomainForm, Array<string | null> | string | null> | null;
 export const domainEditFormValidator = (form: IDomainForm): DomainFormValidation => {
 
-  const result = {
+  const result: DomainFormValidation = {
     name: domainNameValidator(form.name),
     ipAddresses: ipAddressesValidator(form.ipAddresses),
     data: null,
     redirects: redirectsValidator(form.redirects),
     skipTLSVerify: null,
     headersDownstream: null,
+    disableAutoHttps: null
   };
 
   return Object.values(result).some(val => {

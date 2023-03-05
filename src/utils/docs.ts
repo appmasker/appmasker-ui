@@ -1,4 +1,4 @@
-import type { DocConfig } from '../types';
+import { DocConfig, HttpsMode } from '../types';
 
 const domainResponse = {
 	name: 'example.com',
@@ -7,7 +7,8 @@ const domainResponse = {
 	redirects: [
 		{ from: '/logo', to: 'https://s3.amazon.com/myaccount/example-biz.png' },
 		{ from: '/styles', to: 'https://s3.amazon.com/myaccount/example-biz-styles.css' }
-	]
+	],
+	httpsMode: HttpsMode.AUTOMATIC
 };
 
 const domainResponseRows = [
@@ -46,7 +47,13 @@ const domainResponseRows = [
 		fieldName: 'redirects',
 		type: 'Array<{from: string, to: string}>',
 		values: ''
-	}
+	},
+	{
+		id: 'd5',
+		fieldName: 'httpsMode',
+		type: 'string',
+		values: `'${HttpsMode.AUTOMATIC}' or '${HttpsMode.DISABLED}'`
+	},
 ];
 
 export const createDomainDocConfig: DocConfig = {
@@ -71,7 +78,8 @@ export const createDomainDocConfig: DocConfig = {
 			type: 'Array<{from: string, to: string}>',
 			values: '',
 			required: 'No'
-		}
+		},
+		{ id: 'e', fieldName: 'httpsMode', type: 'string', values: `'${HttpsMode.AUTOMATIC}' (default) or '${HttpsMode.DISABLED}'`, required: 'No' }
 	],
 	exampleRequest: domainResponse,
 	responseType: 'Object',
@@ -123,7 +131,15 @@ export const editManyDomainsDocConfig: DocConfig = {
 			type: 'Array<{from: string, to: string}>',
 			values: '',
 			required: 'No'
-		}
+		},
+		{
+			id: 'e',
+			fieldName: 'httpsMode',
+			type: 'string',
+			values: `'${HttpsMode.AUTOMATIC}' or '${HttpsMode.DISABLED}'`,
+			required: 'No'
+		},
+
 	],
 	exampleRequest: [domainResponse],
 	responseType: '{count: number, domains: Array<Object>}',

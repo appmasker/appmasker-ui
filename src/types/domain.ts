@@ -11,6 +11,11 @@ export class Redirect {
 	to: string;
 }
 
+export enum HttpsMode {
+	AUTOMATIC = 'automatic',
+	DISABLED = 'disabled'
+}
+
 export interface DomainConfig {
 	id: string;
 	name: string;
@@ -20,6 +25,7 @@ export interface DomainConfig {
 	redirects: Redirect[];
 	skipTLSVerify: boolean;
 	headersDownstream: HeaderConfig;
+	httpsMode: HttpsMode;
 }
 
 export interface DomainConfigInput {
@@ -30,6 +36,7 @@ export interface DomainConfigInput {
 	redirects?: Redirect[];
 	skipTLSVerify: boolean;
 	headersDownstream?: HeaderConfig;
+	httpsMode: HttpsMode;
 }
 
 export interface IDomainForm {
@@ -42,6 +49,7 @@ export interface IDomainForm {
 	redirects?: Redirect[];
 	skipTLSVerify: boolean;
 	headersDownstream?: HeaderFormList;
+	disableAutoHttps: boolean;
 }
 
 export interface DomainRecordCheckResponse {
@@ -72,7 +80,8 @@ export function toDomainForm(domainConfig: DomainConfig): IDomainForm {
 			ipAddresses: domainConfig.ipAddresses ?? [''],
 			data: domainConfig.data ? JSON.stringify(domainConfig.data, null, 2) : '',
 			headersDownstream: domainConfig.headersDownstream ? headerConfigToForm(domainConfig.headersDownstream) : [],
-			redirects: domainConfig.redirects ?? []
+			redirects: domainConfig.redirects ?? [],
+			disableAutoHttps: domainConfig.httpsMode === HttpsMode.DISABLED
 		};
 	} catch (error) {
 		console.error(error);
@@ -84,7 +93,8 @@ export function toDomainConfigInput(input: IDomainForm): DomainConfigInput {
 	return {
 		...input,
 		data: input.data ? JSON.parse(input.data) : null,
-		headersDownstream: headerListToObject(input.headersDownstream)
+		headersDownstream: headerListToObject(input.headersDownstream),
+		httpsMode: input.disableAutoHttps ? HttpsMode.DISABLED : HttpsMode.AUTOMATIC
 	};
 }
 

@@ -32,7 +32,7 @@
 <style>
 	.notification-container {
 		z-index: 100000;
-		position: absolute;
+		position: fixed;
 		top: 50px;
 		right: 2rem;
 	}

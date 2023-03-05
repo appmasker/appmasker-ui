@@ -3,6 +3,9 @@ export interface Account {
 	email: string;
 	name: string;
 	type: AccountType;
+	serverPlanExpires: Date;
+	serverSubscriptionId: string;
+	paymentMethodId: string;
 }
 
 export enum AccountType {

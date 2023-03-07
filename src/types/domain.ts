@@ -16,6 +16,8 @@ export enum HttpsMode {
 	DISABLED = 'disabled'
 }
 
+export type RewriteConfig = { uri?: string; method?: string };
+
 export interface DomainConfig {
 	id: string;
 	name: string;
@@ -26,6 +28,7 @@ export interface DomainConfig {
 	skipTLSVerify: boolean;
 	headersDownstream: HeaderConfig;
 	httpsMode: HttpsMode;
+	rewrite: RewriteConfig;
 }
 
 export interface DomainConfigInput {
@@ -37,6 +40,7 @@ export interface DomainConfigInput {
 	skipTLSVerify: boolean;
 	headersDownstream?: HeaderConfig;
 	httpsMode: HttpsMode;
+	rewrite: RewriteConfig;
 }
 
 export interface IDomainForm {
@@ -50,6 +54,7 @@ export interface IDomainForm {
 	skipTLSVerify: boolean;
 	headersDownstream?: HeaderFormList;
 	disableAutoHttps: boolean;
+	rewriteUri: string;
 }
 
 export interface DomainRecordCheckResponse {
@@ -76,12 +81,13 @@ export function toDomainForm(domainConfig: DomainConfig): IDomainForm {
 	try {
 		return {
 			...domainConfig,
-			name: domainConfig.name ?? '',
-			ipAddresses: domainConfig.ipAddresses ?? [''],
+			name: domainConfig.name || '',
+			ipAddresses: domainConfig.ipAddresses || [''],
 			data: domainConfig.data ? JSON.stringify(domainConfig.data, null, 2) : '',
 			headersDownstream: domainConfig.headersDownstream ? headerConfigToForm(domainConfig.headersDownstream) : [],
-			redirects: domainConfig.redirects ?? [],
-			disableAutoHttps: domainConfig.httpsMode === HttpsMode.DISABLED
+			redirects: domainConfig.redirects || [],
+			disableAutoHttps: domainConfig.httpsMode === HttpsMode.DISABLED,
+			rewriteUri: domainConfig.rewrite?.uri || ''
 		};
 	} catch (error) {
 		console.error(error);
@@ -94,7 +100,8 @@ export function toDomainConfigInput(input: IDomainForm): DomainConfigInput {
 		...input,
 		data: input.data ? JSON.parse(input.data) : null,
 		headersDownstream: headerListToObject(input.headersDownstream),
-		httpsMode: input.disableAutoHttps ? HttpsMode.DISABLED : HttpsMode.AUTOMATIC
+		httpsMode: input.disableAutoHttps ? HttpsMode.DISABLED : HttpsMode.AUTOMATIC,
+		rewrite: input.rewriteUri ? { uri: input.rewriteUri } : null
 	};
 }
 

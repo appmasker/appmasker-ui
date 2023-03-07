@@ -5,17 +5,22 @@
 		Button,
 		Checkbox,
 		Form,
-		TextInput
+		TextInput,
+		TextArea,
+		Link
 	} from 'carbon-components-svelte';
 	import ArrowRight16 from 'carbon-icons-svelte/lib/ArrowRight16';
 	import TrashCan16 from 'carbon-icons-svelte/lib/TrashCan16';
+	import { jsonPlaceholder } from '../../utils/consts';
 	import { createEventDispatcher } from 'svelte';
 	import { IDomainForm, Redirect } from '../../types';
 	import {
 		domainNameValidator,
 		ipAddressValidator,
 		redirectFromValidator,
-		redirectToValidator
+		redirectToValidator,
+		domainDataValidator,
+		rewriteUriValidator
 	} from '../../utils/validators';
 	import Validator from './Validator.svelte';
 
@@ -112,22 +117,6 @@
 		{/each}
 		<Button kind="tertiary" size="field" on:click={addAddress}>+ Add Address</Button>
 	</div>
-	<!-- <div class="block redirect-form-row bottom-margin">
-		<div class="block">
-			<h5>Tenant Data</h5>
-			<p>Optional. You can query this data from our API later.</p>
-			<div class="block">
-				<TextArea
-					bind:value={data.data}
-					rows={10}
-					labelText="Tenant Data"
-					hideLabel={true}
-					placeholder={jsonPlaceholder}
-					helperText="Generally the structure of this object will be consistent with all your tenants but the values should vary."
-				/>
-			</div>
-		</div>
-	</div> -->
 	<div class="block bottom-margin">
 		<div class="block">
 			<h5>Redirects</h5>
@@ -192,6 +181,38 @@
 	</div>
 
 	<div class="block bottom-margin">
+		<div class="block">
+			<h5>Metadata</h5>
+			<p>
+				Optional. You can query this data from our <Link href="/dashboard/api" target="_blank"
+					>API</Link
+				> later.
+			</p>
+			<div class="block" on:keydown|stopPropagation>
+				<Validator
+					bind:value={data.data}
+					fn={domainDataValidator}
+					let:onBlur
+					let:invalid
+					let:invalidText
+				>
+					<TextArea
+						bind:value={data.data}
+						on:blur={onBlur}
+						{invalid}
+						{invalidText}
+						rows={10}
+						labelText="Tenant Data"
+						hideLabel={true}
+						placeholder={jsonPlaceholder}
+						helperText="Generally the structure of this object will be consistent with all your tenants but the values should vary."
+					/>
+				</Validator>
+			</div>
+		</div>
+	</div>
+
+	<div class="block bottom-margin">
 		<Accordion>
 			<AccordionItem title="Advanced...">
 				<div class="block bottom-margin">
@@ -235,24 +256,66 @@
 					{/each}
 					<Button kind="tertiary" size="field" on:click={addHeader}>+ Add A Header</Button>
 				</div>
-				<div class="block">
-					<div class="block">
-						<p>Enable this if you're running into HTTPS errors when using this domain.</p>
-					</div>
 
-					<Checkbox labelText="Ignore TLS Insecure Verify" bind:checked={data.skipTLSVerify} />
-				</div>
-				<div class="block">
+				<div class="block bottom-margin">
 					<div class="block">
+						<h5>URI Rewrites</h5>
 						<p>
-							Checking this allows you to navigate to http://yourdomain.com without automatically
-							redirecting to https://
+							If you want to have all requests to your backend include a path or query param, enter
+							that here.
 						</p>
+						<p>
+							For example, say your backend "address" is <code>mysite.com:443</code>. If you
+							navigate to
+							<br />
+							<code>https://customdomain.com/help?foo=bar</code><br /> and your URI rewrite value is
+							<br /><code>/home?fizz=buzz</code>
+							then the final address that AppMasker would proxy to would be:
+							<br /><code>mysite.com:443/home/help?fizz=buzz&foo=bar</code> (the paths and query params
+							get merged).
+						</p>
+						<div class="block">
+							<Validator
+								bind:value={data.rewriteUri}
+								fn={rewriteUriValidator}
+								let:onBlur
+								let:invalid
+								let:invalidText
+							>
+								<TextInput
+									bind:value={data.rewriteUri}
+									on:blur={onBlur}
+									{invalid}
+									{invalidText}
+									labelText="Rewrite URI"
+									hideLabel={true}
+									placeholder="/dashboard?tenant=1234"
+									helperText="Enter either a path and / or a query string."
+								/>
+							</Validator>
+						</div>
 					</div>
 
-					<Checkbox labelText="Disable Automatic HTTPS" bind:checked={data.disableAutoHttps} />
-				</div>
-			</AccordionItem>
+					<div class="block bottom-margin">
+						<div class="block">
+							<p>Enable this if you're running into HTTPS errors when using this domain.</p>
+						</div>
+
+						<Checkbox labelText="Ignore TLS Insecure Verify" bind:checked={data.skipTLSVerify} />
+					</div>
+
+					<div class="block bottom-margin">
+						<div class="block">
+							<p>
+								Checking this allows you to navigate to http://yourdomain.com without automatically
+								redirecting to https://
+							</p>
+						</div>
+
+						<Checkbox labelText="Disable Automatic HTTPS" bind:checked={data.disableAutoHttps} />
+					</div>
+				</div></AccordionItem
+			>
 		</Accordion>
 	</div>
 </Form>

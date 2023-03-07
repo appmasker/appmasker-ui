@@ -104,6 +104,30 @@ export const redirectsValidator = (redirects: Redirect[]): Array<string | null> 
 
 }
 
+export const domainDataValidator = (data: string): string | null => {
+  try {
+    JSON.parse(data);
+    return null;
+  } catch (error) {
+    return 'Please enter valid JSON data for Metadata';
+  }
+}
+
+export const rewriteUriValidator = (value: string): string | null => {
+  if (value) {
+    try {
+      if (!value.startsWith('/') && !value.startsWith('?')) {
+        return `URI Rewrite must begin with '/' or '?'`;
+      }
+      new URL(value, 'https://example.com');
+      return null;
+    } catch (error) {
+      return error?.message || error;
+    }
+  }
+  return null;
+}
+
 export type DomainFormValidation = Record<keyof IDomainForm, Array<string | null> | string | null> | null;
 export const domainEditFormValidator = (form: IDomainForm): DomainFormValidation => {
 
@@ -114,7 +138,8 @@ export const domainEditFormValidator = (form: IDomainForm): DomainFormValidation
     redirects: redirectsValidator(form.redirects),
     skipTLSVerify: null,
     headersDownstream: null,
-    disableAutoHttps: null
+    disableAutoHttps: null,
+    rewriteUri: rewriteUriValidator(form.rewriteUri)
   };
 
   return Object.values(result).some(val => {

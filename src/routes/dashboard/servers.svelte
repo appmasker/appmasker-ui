@@ -24,7 +24,7 @@
 	const headers: { key: string; value: string | number }[] = [
 		{ key: 'status', value: 'Status' },
 		{ key: 'name', value: 'Name' },
-		{ key: 'ipv4Address', value: 'IP Addresses (v4 / v6)' },
+		{ key: 'ipAddress', value: 'IP Addresses' },
 		{ key: 'regions', value: 'Regions' },
 		{ key: 'createdDate', value: 'Created' },
 		{ key: 'actions', value: '' }
@@ -69,12 +69,16 @@
 			</Toolbar>
 			<div slot="cell" let:row let:cell>
 				<span>
-					{#if cell.key === 'ipv4Address'}
+					{#if cell.key === 'ipAddress'}
 						<div
 							style="display: flex; flex-direction: column; justify-content: flex-start; align-items: flex-start"
-						>
-							<CodeSnippet type="inline" code={row.ipv4Address} feedback="Copied to clipboard!" />
-							<CodeSnippet type="inline" code={row.ipv6Address} feedback="Copied to clipboard!" />
+						>	
+							{#if row.ipv4Address}
+								<CodeSnippet type="inline" code={row.ipv4Address} feedback="Copied to clipboard!" />
+							{/if}
+							{#if row.ipv6Address}
+								<CodeSnippet type="inline" code={row.ipv6Address} feedback="Copied to clipboard!" />
+							{/if}
 						</div>
 					{:else if cell.key === 'status'}
 						<ServerStatus server={row} />

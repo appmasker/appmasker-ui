@@ -4,7 +4,7 @@ import { backendCall } from "../../api";
 import type { Server, ServerInput, ServerUpdateInput } from "../../types";
 import { effectManager } from "../store-utils";
 import { showNotification$ } from "../user.state";
-import { accountServers$, deleteServer$, getServer$, launchServer$, updateServer$ } from "./server.state";
+import { accountServers$, deleteServer$, getServer$, createServer$, updateServer$ } from "./server.state";
 
 export const getServers = effectManager<Server[]>(
   accountServers$,
@@ -28,9 +28,29 @@ export const regionCount = derived(getServers.store, $servers => {
   return regionCount;
 });
 
-export const launchServer = effectManager<Server, ServerInput>(
-  launchServer$,
+export const createServer = effectManager<Server, ServerInput>(
+  createServer$,
   (data) => backendCall('/server', 'POST', data),
+  (response, success) => {
+    if (!success) {
+      // showNotification$.set({
+      //   title: 'Failed to retrieve your servers',
+      //   message: response.message,
+      //   kind: 'error',
+      // });
+    } else {
+      showNotification$.set({
+        title: 'Server Created!',
+        message: 'Please verify your DNS records before launching it.',
+        kind: 'success'
+      });
+    }
+  }
+);
+
+export const launchServer = effectManager<Server, Server>(
+  createServer$,
+  (data) => backendCall(`/server/launch/${data.id}`, 'POST', data),
   (response, success) => {
     if (!success) {
       // showNotification$.set({
@@ -47,7 +67,7 @@ export const launchServer = effectManager<Server, ServerInput>(
       });
     }
   }
-)
+);
 
 export const getServer = effectManager<Server, string>(
   getServer$,

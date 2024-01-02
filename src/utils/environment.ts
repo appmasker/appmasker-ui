@@ -27,3 +27,5 @@ export const getAppHost = (): string => {
 	const host = ENVIRONMENT === 'production' ? 'https://app.appmasker.com' : 'https://dev.appmasker.com';
 	return host;
 }
+
+export const GITHUB_CLIENT_ID = import.meta.env.VITE_GITHUB_CLIENT_ID as string;

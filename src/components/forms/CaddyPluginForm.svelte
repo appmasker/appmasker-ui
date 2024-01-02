@@ -3,9 +3,12 @@
 	import TrashCan16 from 'carbon-icons-svelte/lib/TrashCan16';
 	import Validator from './Validator.svelte';
 	import { goModuleValidator } from '../../utils/validators';
+	import { currentUser$ } from '../../store';
+	import GithubAuth from '../GithubAuth.svelte';
 
 	export let plugins = [''];
 	export let readonly = false;
+
 </script>
 
 <p>
@@ -17,9 +20,7 @@
 	>
 </p>
 <p>
-	You can specify a version of the module like so: <code
-		>github.com/caddyserver/ntlm-transport@v0.1.1</code
-	>
+	<GithubAuth user={$currentUser$?.data} />
 </p>
 {#if readonly}
 	<InlineNotification
@@ -38,7 +39,7 @@
 				id={`plugin-${index}`}
 				labelText=""
 				helperText="enter a go module path like: github.com/caddy-dns/cloudflare"
-				placeholder="github.com/caddy-dns/cloudflare"
+				placeholder="github.com/caddy-dns/cloudflare@v1.0.0"
 				size="xl"
 				{readonly}
 				on:blur={onBlur}

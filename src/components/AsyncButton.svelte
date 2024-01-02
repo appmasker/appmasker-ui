@@ -3,6 +3,8 @@
 
 	export let isLoading = false;
 	export let icon = null;
+	export let disabled = false;
+	export let type = 'button';
 	export let kind:
 		| 'primary'
 		| 'secondary'
@@ -13,7 +15,7 @@
 		| 'danger-ghost' = 'primary';
 </script>
 
-<Button {kind} disabled={isLoading} {icon} on:click>
+<Button {type} {kind} disabled={isLoading || disabled} {icon} on:click>
 	<div class="async-button-content">
 		<slot />
 		{#if isLoading}

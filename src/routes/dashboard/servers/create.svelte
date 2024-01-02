@@ -1,21 +1,23 @@
 <script lang="ts">
 	import { Breadcrumb, BreadcrumbItem } from 'carbon-components-svelte';
-	import { products } from '../../../utils/billing';
 	import UpdateBillingDialog from '../../../components/dialogs/UpdateBillingDialog.svelte';
 	import ServerCreationForm from '../../../components/forms/ServerCreationForm.svelte';
-	import { ServerInput, ServerTier } from '../../../types';
+	import { Server, ServerInput, ServerTier } from '../../../types';
 	import billingService from '../../../services/billing-service';
 	import {
 		getServers,
-		accountServers$,
-		launchServer,
 		regionCount,
-		getCurrentUser
+		getCurrentUser,
+		createServer,
+		createServer$,
+		launchServer
 	} from '../../../store';
 
 	let billingDialogIsOpen = false;
 	let price: number = 0;
 	let tier: ServerTier = ServerTier.BASIC;
+	let isEditMode = false;
+	let launchReady = false;
 
 	getServers.dispatch();
 
@@ -23,18 +25,20 @@
 		getCurrentUser.dispatch(null, (err) => {
 			const newRegionCount = $regionCount + submission.detail.regions.length;
 			if (billingService.accountIsGood() || newRegionCount <= 1) {
-				launchServer.dispatch(submission.detail);
+				createServer.dispatch(submission.detail);
+				isEditMode = true;
+				launchReady = true;
 				localStorage.removeItem('caddy-form');
 			} else {
 				// set the price for the billing dialog
-				price = billingService.computeMonthlySubtotal(
-					tier,
-					$accountServers$.data,
-					submission.detail.regions.length
-				);
+				price = billingService.computeMonthlySubtotal(tier, submission.detail.regions.length);
 				billingDialogIsOpen = true;
 			}
 		});
+	}
+
+	function onLaunch(server: CustomEvent<Server>): void {
+		launchServer.dispatch(server.detail);
 	}
 </script>
 
@@ -47,7 +51,14 @@
 	</div>
 
 	<h1>Deploy a Caddy Web Server</h1>
-	<ServerCreationForm isEdit={false} {tier} on:submit={(event) => onSubmit(event)} />
+	<ServerCreationForm
+		isEdit={isEditMode}
+		{launchReady}
+		{tier}
+		server={$createServer$.data}
+		on:submit={(event) => onSubmit(event)}
+		on:launch={(event) => onLaunch(event)}
+	/>
 </div>
 
 <UpdateBillingDialog

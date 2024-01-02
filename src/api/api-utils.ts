@@ -30,5 +30,14 @@ export const backendCall = <ResponseData, Body = void>(
 		if (resp.ok) {
 			return data;
 		}
-		throw new Error(data?.['message'] || 'An error occurred');
+		throw new BackendError(data?.['message'] || 'An error occurred', resp.status);
 	});
+
+export class BackendError extends Error {
+	constructor(message?: string, statusCode?: number) {
+		super(message);
+		this.statusCode = statusCode;
+	}
+
+	statusCode: number;
+}

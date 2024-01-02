@@ -9,8 +9,10 @@
 		<p>
 			{$currentUser$?.data?.email}
 		</p>
-		<form method="POST" action="/stripe/create-portal-session">
-			<Button type="submit" kind="secondary">Manage billing with Stripe</Button>
-		</form>
+		<div class="block">
+			<form method="POST" action="/stripe/create-portal-session">
+				<Button type="submit" kind="secondary">Manage billing with Stripe</Button>
+			</form>
+		</div>
 	</Tile>
 </div>

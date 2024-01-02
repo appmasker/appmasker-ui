@@ -2,8 +2,12 @@
 	import {
 		Accordion,
 		AccordionItem,
+		Checkbox,
+		CodeSnippet,
+		DataTable,
 		Dropdown,
 		Form,
+		FormGroup,
 		InlineNotification,
 		Link,
 		ListItem,
@@ -13,6 +17,7 @@
 		UnorderedList
 	} from 'carbon-components-svelte';
 	import CloudUpload32 from 'carbon-icons-svelte/lib/CloudUpload32';
+	import AddAlt32 from 'carbon-icons-svelte/lib/AddAlt32';
 	import { products } from '../../utils/billing';
 	import { createEventDispatcher } from 'svelte';
 	import {
@@ -22,20 +27,23 @@
 		serverToForm,
 		validateForm
 	} from '../../routes/dashboard/servers/_utils';
-	import { launchServer$, showNotification$, updateServer$ } from '../../store';
-	import { Server, ServerConfigType, ServerForm, ServerInput, ServerTier } from '../../types';
 	import { flyRegions } from '../../utils/consts';
 	import AsyncButton from '../AsyncButton.svelte';
 	import CaddyServerHelp from '../dialogs/CaddyServerHelp.svelte';
 	import InlineMessage from '../indicators/InlineMessage.svelte';
-	import billingService from '../../services/billing-service';
-	import { accountServers$ } from '../../store';
+	import { showNotification$, updateServer$, createServer$, launchServer$ } from '../../store';
 	import Tooltip from '../Tooltip.svelte';
 	import CaddyPluginForm from './CaddyPluginForm.svelte';
+	import { Server, ServerConfigType, ServerForm, ServerInput, ServerTier } from '../../types';
+	import billingService from '../../services/billing-service';
 
 	export let server: Server = null;
 	export let isEdit = false;
 	export let tier: ServerTier = ServerTier.BASIC;
+	export let launchReady = false;
+
+	let aRecord = false,
+		aaaaRecord = false;
 
 	const dispatch = createEventDispatcher();
 
@@ -68,6 +76,10 @@
 					data.configType === ServerConfigType.JSON ? JSON.parse(data.caddyJSONConfig) : undefined
 			} as ServerInput);
 		}
+	}
+
+	function onLaunch(): void {
+		dispatch('launch', server);
 	}
 </script>
 
@@ -109,7 +121,7 @@
 	</Accordion>
 </section>
 
-<section class="block">
+<section class="large-container">
 	<Form on:submit={onSubmit}>
 		<div class="block bottom-margin">
 			<div class="block form-medium">
@@ -120,6 +132,7 @@
 					placeholder="My main server"
 					helperText="Give this server a name"
 					required
+					disabled={launchReady}
 				/>
 			</div>
 
@@ -141,8 +154,10 @@
 				</p>
 				<div class="region-tile-grid" role="group" aria-label="selectable tiles">
 					{#each flyRegions as region}
-						<SelectableTile bind:selected={data.regions[region.id]} value={region.id}
-							>{region.label}</SelectableTile
+						<SelectableTile
+							disabled={launchReady}
+							bind:selected={data.regions[region.id]}
+							value={region.id}>{region.label}</SelectableTile
 						>
 					{/each}
 				</div>
@@ -154,9 +169,7 @@
 						title="Your new price:"
 						subtitle={`$${billingService.computeMonthlySubtotal(
 							tier,
-							$accountServers$.data,
-							Object.values(data.regions).filter(Boolean).length,
-							server.id
+							Object.values(data.regions).filter(Boolean).length
 						)}.00 USD per
 			month`}
 					/>
@@ -168,10 +181,9 @@
 						title="Subtotal:"
 						subtitle={`$${billingService.computeMonthlySubtotal(
 							tier,
-							$accountServers$.data,
 							Object.values(data.regions).filter(Boolean).length
 						)}.00 USD per
-					month (your first server & 1 region are on us 😊)`}
+					month (1 month of total usage is free!)`}
 					/>
 				{/if}
 			</div>
@@ -182,6 +194,7 @@
 				<div class="caddy-select-container">
 					<Dropdown
 						helperText="Are you using a Caddyfile or a JSON config?"
+						disabled={launchReady}
 						bind:selectedIndex={selectedConfigTypeIndex}
 						items={[
 							{ id: 'caddy', text: 'Caddyfile' },
@@ -195,6 +208,7 @@
 				<div class="block">
 					<TextArea
 						labelText="Caddyfile"
+						disabled={launchReady}
 						bind:value={data.caddyFileConfig}
 						rows={10}
 						hideLabel={true}
@@ -206,6 +220,7 @@
 				<div class="block">
 					<TextArea
 						labelText="Caddy JSON Config"
+						disabled={launchReady}
 						bind:value={data.caddyJSONConfig}
 						rows={10}
 						hideLabel={true}
@@ -215,12 +230,12 @@
 				</div>
 			{/if}
 
-			{#if isEdit ? $updateServer$.isError : $launchServer$.isError}
+			{#if isEdit ? $updateServer$.isError : $createServer$.isError}
 				<div class="block">
 					<InlineMessage
 						title="Error"
 						kind="error"
-						state={isEdit ? $updateServer$ : $launchServer$}
+						state={isEdit ? $updateServer$ : $createServer$}
 					/>
 				</div>
 			{/if}
@@ -231,28 +246,121 @@
 						<svelte:fragment slot="title">
 							<h5>Caddy Plugins</h5>
 						</svelte:fragment>
-						<CaddyPluginForm bind:plugins={data.plugins} readonly={isEdit} />
+						<CaddyPluginForm bind:plugins={data.plugins} readonly={isEdit || launchReady} />
 					</AccordionItem>
 				</Accordion>
 			</div>
 
-			<div class="block">
-				<InlineNotification
-					title="DNS: "
-					subtitle="After launching, the IP addresses will be generated for you to point your domains' DNS records."
-					kind="warning"
-					hideCloseButton
-				/>
-			</div>
+			<h4 class="block">IP Addresses</h4>
+			<p>Contact us if you need an IPv4 Address.</p>
+
+			{#if isEdit && !launchReady}
+				<div class="block form-medium">
+					<DataTable
+						headers={[
+							{ key: "ipAddress", value: "IP Address" },
+							{ key: "type", value: "Type" },
+						]}
+						rows={[
+							{
+								id: '1',
+								ipAddress: server?.ipv6Address,
+								type: "IPv6",
+							},
+							{
+								id: '2',
+								ipAddress: server?.ipv4Address,
+								type: "IPv4",
+							},
+						].filter((row) => row.ipAddress)}
+					>
+						<div slot="cell" let:row let:cell>
+							<span>
+								{#if cell.key === 'ipAddress'}
+									<CodeSnippet
+										type="inline"
+										code={cell.value}
+										feedback="Copied to clipboard!"
+									/>
+								{:else}
+									{cell.value}
+								{/if}
+							</span>
+						</div>
+					</DataTable>
+				</div>
+			{/if}
+
+			{#if !launchReady && !isEdit}
+				<div class="block">
+					<InlineNotification
+						title="DNS: "
+						subtitle="After creation, the IP addresses will be generated for you to point your domains' DNS records."
+						kind="warning"
+						hideCloseButton
+					/>
+				</div>
+			{:else if launchReady}
+				<div class="block">
+					<InlineNotification
+						title="Update your DNS Records!"
+						subtitle={`Before launching you must add DNS records for any domains used in your Caddyfile, if applicable.
+							Check the box below once you've set your DNS records.`}
+						kind="warning-alt"
+						hideCloseButton
+					/>
+				</div>
+			{/if}
 
 			<div class="block">
-				<AsyncButton
-					on:click={onSubmit}
-					isLoading={isEdit ? $updateServer$.isLoading : $launchServer$.isLoading}
-					icon={CloudUpload32}
-				>
-					{isEdit ? 'Update Server' : 'Launch Server'}
-				</AsyncButton>
+				{#if !launchReady}
+						<AsyncButton
+							on:click={onSubmit}
+							isLoading={isEdit ? $updateServer$.isLoading : $createServer$.isLoading}
+							icon={isEdit ? CloudUpload32 : AddAlt32}
+						>
+							{isEdit ? 'Update Server' : 'Create Server'}
+						</AsyncButton>
+				{:else}
+					<Form on:submit={onLaunch}>
+						<FormGroup>
+							<!-- <div class="checkbox-row">
+								<div>
+									<Checkbox id="a-record" bind:checked={aRecord} labelText="A record, value:" />
+								</div>
+								<CodeSnippet
+									type="inline"
+									code={server?.ipv4Address}
+									feedback="Copied to clipboard!"
+								/>
+							</div> -->
+							<div class="checkbox-row">
+								<div>
+									<Checkbox
+										id="aaaa-record"
+										bind:checked={aaaaRecord}
+										labelText="AAAA record, value:"
+									/>
+								</div>
+								<CodeSnippet
+									type="inline"
+									code={server?.ipv6Address}
+									feedback="Copied to clipboard!"
+								/>
+							</div>
+							<div class="block">
+								<AsyncButton
+									type="submit"
+									disabled={!aRecord && !aaaaRecord}
+									isLoading={$launchServer$.isLoading || $createServer$.isLoading}
+									icon={CloudUpload32}
+								>
+									Launch Server
+								</AsyncButton>
+							</div>
+						</FormGroup>
+					</Form>
+				{/if}
 			</div>
 		</div>
 	</Form>
@@ -278,5 +386,11 @@
 		display: flex;
 		gap: 15px;
 		align-items: center;
+	}
+	.checkbox-row {
+		display: flex;
+		align-items: center;
+		justify-content: flex-start;
+		gap: 5px;
 	}
 </style>

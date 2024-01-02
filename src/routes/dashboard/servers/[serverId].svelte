@@ -30,8 +30,8 @@
 	import { backendCall } from '../../../api';
 	import AsyncButton from '../../../components/AsyncButton.svelte';
 	import ServerCreationForm from '../../../components/forms/ServerCreationForm.svelte';
-	import { deleteServer, deleteServer$, updateServer } from '../../../store';
-	import type { Server, ServerInput } from '../../../types';
+	import { deleteServer, deleteServer$, updateServer, launchServer } from '../../../store';
+	import { ServerStatus, Server, ServerInput } from '../../../types';
 
 	export let server: Server;
 	let openDeleteConfirm = false;
@@ -47,6 +47,9 @@
 			...form
 		});
 		localStorage.removeItem('caddy-form');
+	}
+	function onLaunchServer(server: Server): void {
+		launchServer.dispatch(server);
 	}
 	function onDeleteServer() {
 		openDeleteConfirm = false;
@@ -65,7 +68,13 @@
 
 	<h1>Manage <b>{server?.name}</b></h1>
 
-	<ServerCreationForm {server} isEdit={true} on:submit={(event) => onEditServer(event.detail)} />
+	<ServerCreationForm
+		{server}
+		launchReady={server.status === ServerStatus.AWAITING_DNS}
+		isEdit={true}
+		on:submit={(event) => onEditServer(event.detail)} 
+		on:launch={(event) => onLaunchServer(event.detail)}
+	/>
 
 	<div class="footer-buttons">
 		<AsyncButton

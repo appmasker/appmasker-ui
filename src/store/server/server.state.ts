@@ -8,6 +8,12 @@ export const accountServers$ = writable<AsyncState<Server[]>>({
   isError: false,
 });
 
+export const createServer$ = writable<AsyncState<Server>>({
+  data: null,
+  isLoading: false,
+  isError: false,
+});
+
 export const launchServer$ = writable<AsyncState<Server>>({
   data: null,
   isLoading: false,

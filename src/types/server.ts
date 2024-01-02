@@ -31,29 +31,29 @@ export interface Server {
 }
 
 export enum ServerStatus {
-  PREPARING = 'preparing',
+	PREPARING = 'preparing',
 
-  // builder steps
-  IMAGE_PREPARING = 'image_preparing',
-  IMAGE_BUILDING = 'image_building',
-  IMAGE_PUSHING = 'image_pushing',
+	// builder steps
+	IMAGE_PREPARING = 'image_preparing',
+	IMAGE_BUILDING = 'image_building',
+	IMAGE_PUSHING = 'image_pushing',
 
-  DEPLOYING = 'deploying',
+	AWAITING_DNS = 'awaiting_dns',
+	DEPLOYING = 'deploying',
 
-  // config steps
-  CONFIG_INITIALIZING = 'config_initializing',
-  CONFIG_LOADING = 'config_loading',
+	// config steps
+	CONFIG_INITIALIZING = 'config_initializing',
+	CONFIG_LOADING = 'config_loading',
 
-  GOOD = 'good',
-  ERROR = 'error'
+	GOOD = 'good',
+	ERROR = 'error'
 }
 
-
 export enum ServerDisplayStatus {
-  UNKNOWN = 'unknown',
-  PENDING = 'pending',
-  GOOD = 'good',
-  FAILURE = 'failure'
+	UNKNOWN = 'UNKNOWN',
+	PENDING = 'PENDING',
+	GOOD = 'GOOD',
+	FAILURE = 'FAILURE'
 }
 
 export enum ServerAppState {
@@ -67,13 +67,26 @@ export enum ServerAppStatus {
 }
 
 export interface ServerApp {
-  id: string;
-  state: ServerAppState,
-  status: string,
-  regions: {
-    code: FlyRegion,
-    name: string,
-  }[]
+	id: string;
+	name: string;
+	machines: {
+		nodes: {
+			region: FlyRegion;
+			id: string;
+			name: string;
+			state: ServerAppState;
+		}[];
+	};
+	state: ServerAppState;
+	status: string;
+	ipAddresses: {
+		nodes: {
+			address: string;
+			id: string;
+			region: 'global';
+			type: 'v4' | 'v6';
+		}[];
+	};
 }
 
 export enum ServerConfigType {

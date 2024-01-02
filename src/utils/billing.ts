@@ -13,6 +13,6 @@ export const isSubscribed = (accountType: AccountType): boolean => {
 
 export const products: { [key in ServerTier]: ProductDetails } = {
 	[ServerTier.BASIC]: {
-		monthlyPrice: 99
+		monthlyPrice: 9
 	}
 };

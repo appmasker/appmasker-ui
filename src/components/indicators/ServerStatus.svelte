@@ -33,6 +33,9 @@
 
 	function getServerStatus(server: Server): ServerDisplayStatus {
 		const flyStatus = getFlyStatus(server.app?.state);
+		if (flyStatus === ServerDisplayStatus.FAILURE) {
+			return ServerDisplayStatus.FAILURE;
+		}
 		switch (server.status) {
 			case ServerStatus.GOOD:
 				return flyStatus;

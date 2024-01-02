@@ -1,5 +1,5 @@
 import { products } from '../utils/billing';
-import { ProductDetails, Server, ServerTier, User } from '../types';
+import type { ProductDetails, ServerTier, User } from '../types';
 
 class BillingService {
 
@@ -19,23 +19,8 @@ class BillingService {
     return this.planIsActive() || !!this.userInfo.account.paymentMethodId;
   }
 
-  computeMonthlySubtotal(tier: ServerTier, currentServers: Server[], newRegions: number, editingId?: string): number {
-    const defaultVal = newRegions * (products[tier] as ProductDetails).monthlyPrice;
-    console.log('default', defaultVal)
-    console.log('tier', tier)
-    console.log('current servers', currentServers)
-    console.log('new regions', newRegions);
-    if (tier === ServerTier.BASIC) {
-      const otherBasicServersCount = currentServers.filter(s => s.tier === ServerTier.BASIC && s.id !== editingId).length;
-      console.log('others', otherBasicServersCount)
-      if (otherBasicServersCount) {
-        return defaultVal;
-      } else {
-        return Math.max(defaultVal - products[ServerTier.BASIC].monthlyPrice, 0);
-      }
-    } else {
-      return defaultVal;
-    }
+  computeMonthlySubtotal(tier: ServerTier, newRegions: number): number {
+    return newRegions * (products[tier] as ProductDetails).monthlyPrice;
   }
 }
 

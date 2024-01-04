@@ -23,9 +23,7 @@
 			case ServerAppState.SUSPENDED:
 				return ServerDisplayStatus.FAILURE;
 			case ServerAppState.DEPLOYED:
-				return server.app.status === ServerAppStatus.RUNNING
-					? ServerDisplayStatus.GOOD
-					: ServerDisplayStatus.FAILURE;
+				return ServerDisplayStatus.GOOD;
 			default:
 				return ServerDisplayStatus.UNKNOWN;
 		}

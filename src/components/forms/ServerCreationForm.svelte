@@ -252,7 +252,6 @@
 			</div>
 
 			<h4 class="block">IP Addresses</h4>
-			<p>Contact us if you need an IPv4 Address.</p>
 
 			{#if isEdit && !launchReady}
 				<div class="block form-medium">
@@ -270,7 +269,7 @@
 							{
 								id: '2',
 								ipAddress: server?.ipv4Address,
-								type: "IPv4",
+								type: "IPv4 (shared)",
 							},
 						].filter((row) => row.ipAddress)}
 					>

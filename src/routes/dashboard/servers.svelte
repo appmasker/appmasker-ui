@@ -74,7 +74,10 @@
 							style="display: flex; flex-direction: column; justify-content: flex-start; align-items: flex-start"
 						>	
 							{#if row.ipv4Address}
-								<CodeSnippet type="inline" code={row.ipv4Address} feedback="Copied to clipboard!" />
+								<div class="ipv4">
+									<CodeSnippet type="inline" code={row.ipv4Address} feedback="Copied to clipboard!" />
+									<div>(shared)</div>
+								</div>
 							{/if}
 							{#if row.ipv6Address}
 								<CodeSnippet type="inline" code={row.ipv6Address} feedback="Copied to clipboard!" />
@@ -112,5 +115,9 @@
 <style>
 	.actions-col {
 		min-width: 50px;
+	}
+	.ipv4 {
+		display: flex;
+		align-items: center;
 	}
 </style>

@@ -6,6 +6,7 @@
 	export let title: string;
 	export let kind: 'error' | 'info' | 'info-square' | 'success' | 'warning' | 'warning-alt' =
 		'error';
+	console.log('error state', state);
 </script>
 
 <ToastNotification {title} {kind} subtitle={state.message} />

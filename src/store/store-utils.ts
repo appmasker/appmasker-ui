@@ -26,6 +26,7 @@ export const effectManager = <Entity, Payload = void>(
 				})
 				.catch((error: BackendError) => {
 					console.error(error);
+					console.log('error message', error.message);
 					store.update((state) => ({ ...state, isLoading: false, message: error?.message, isError: true, statusCode: error.statusCode }));
 					afterEffect?.(error, false);
 					cb?.(error);

@@ -230,12 +230,12 @@
 				</div>
 			{/if}
 
-			{#if isEdit ? $updateServer$.isError : $createServer$.isError}
+			{#if $createServer$.isError || $updateServer$.isError}
 				<div class="block">
 					<InlineMessage
 						title="Error"
 						kind="error"
-						state={isEdit ? $updateServer$ : $createServer$}
+						state={$createServer$ || $updateServer$}
 					/>
 				</div>
 			{/if}
@@ -323,16 +323,19 @@
 				{:else}
 					<Form on:submit={onLaunch}>
 						<FormGroup>
-							<!-- <div class="checkbox-row">
-								<div>
-									<Checkbox id="a-record" bind:checked={aRecord} labelText="A record, value:" />
+							{#if server?.ipv4Address}
+								<div class="checkbox-row">
+									<div>
+										<Checkbox id="a-record" bind:checked={aRecord} labelText="A record, value:" />
+									</div>
+									<CodeSnippet
+										type="inline"
+										code={server?.ipv4Address}
+										feedback="Copied to clipboard!"
+									/>
+									<div>(shared)</div>
 								</div>
-								<CodeSnippet
-									type="inline"
-									code={server?.ipv4Address}
-									feedback="Copied to clipboard!"
-								/>
-							</div> -->
+							{/if}
 							<div class="checkbox-row">
 								<div>
 									<Checkbox

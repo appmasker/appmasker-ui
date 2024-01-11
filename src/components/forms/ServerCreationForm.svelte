@@ -43,7 +43,8 @@
 	export let launchReady = false;
 
 	let aRecord = false,
-		aaaaRecord = false;
+		aaaaRecord = false,
+		cnameRecord = false;
 
 	const dispatch = createEventDispatcher();
 
@@ -232,11 +233,7 @@
 
 			{#if $createServer$.isError || $updateServer$.isError}
 				<div class="block">
-					<InlineMessage
-						title="Error"
-						kind="error"
-						state={$createServer$ || $updateServer$}
-					/>
+					<InlineMessage title="Error" kind="error" state={$createServer$ || $updateServer$} />
 				</div>
 			{/if}
 
@@ -257,30 +254,26 @@
 				<div class="block form-medium">
 					<DataTable
 						headers={[
-							{ key: "ipAddress", value: "IP Address" },
-							{ key: "type", value: "Type" },
+							{ key: 'ipAddress', value: 'IP Address' },
+							{ key: 'type', value: 'Type' }
 						]}
 						rows={[
 							{
 								id: '1',
 								ipAddress: server?.ipv6Address,
-								type: "IPv6",
+								type: 'IPv6'
 							},
 							{
 								id: '2',
 								ipAddress: server?.ipv4Address,
-								type: "IPv4 (shared)",
-							},
+								type: 'IPv4 (shared)'
+							}
 						].filter((row) => row.ipAddress)}
 					>
 						<div slot="cell" let:row let:cell>
 							<span>
 								{#if cell.key === 'ipAddress'}
-									<CodeSnippet
-										type="inline"
-										code={cell.value}
-										feedback="Copied to clipboard!"
-									/>
+									<CodeSnippet type="inline" code={cell.value} feedback="Copied to clipboard!" />
 								{:else}
 									{cell.value}
 								{/if}
@@ -299,31 +292,30 @@
 						hideCloseButton
 					/>
 				</div>
-			{:else if launchReady}
-				<div class="block">
-					<InlineNotification
-						title="Update your DNS Records!"
-						subtitle={`Before launching you must add DNS records for any domains used in your Caddyfile, if applicable.
-							Check the box below once you've set your DNS records.`}
-						kind="warning-alt"
-						hideCloseButton
-					/>
-				</div>
 			{/if}
 
 			<div class="block">
-				{#if !launchReady}
-						<AsyncButton
-							on:click={onSubmit}
-							isLoading={isEdit ? $updateServer$.isLoading : $createServer$.isLoading}
-							icon={isEdit ? CloudUpload32 : AddAlt32}
-						>
-							{isEdit ? 'Update Server' : 'Create Server'}
-						</AsyncButton>
+				{#if launchReady}
+					<AsyncButton
+						on:click={onSubmit}
+						isLoading={isEdit ? $updateServer$.isLoading : $createServer$.isLoading}
+						icon={isEdit ? CloudUpload32 : AddAlt32}
+					>
+						{isEdit ? 'Update Server' : 'Create Server'}
+					</AsyncButton>
 				{:else}
+					<div class="block">
+						<InlineNotification
+							title="Update your DNS Records!"
+							subtitle={`Before launching you must add DNS records for any domains used in your Caddyfile, if applicable.
+								Check the box below once you've set your DNS records.`}
+							kind="warning-alt"
+							hideCloseButton
+						/>
+					</div>
 					<Form on:submit={onLaunch}>
 						<FormGroup>
-							{#if server?.ipv4Address}
+							<!-- {#if server?.ipv4Address}
 								<div class="checkbox-row">
 									<div>
 										<Checkbox id="a-record" bind:checked={aRecord} labelText="A record, value:" />
@@ -335,7 +327,7 @@
 									/>
 									<div>(shared)</div>
 								</div>
-							{/if}
+							{/if} -->
 							<div class="checkbox-row">
 								<div>
 									<Checkbox
@@ -350,17 +342,32 @@
 									feedback="Copied to clipboard!"
 								/>
 							</div>
+							<div class="checkbox-row">
+								<div>
+									<Checkbox
+										id="cname-record"
+										bind:checked={cnameRecord}
+										labelText="CNAME record, value:"
+									/>
+								</div>
+								<CodeSnippet
+									type="inline"
+									code={server?.appId + '.fly.dev'}
+									feedback="Copied to clipboard!"
+								/>
+							</div>
 							<div class="block">
 								<AsyncButton
 									type="submit"
-									disabled={!aRecord && !aaaaRecord}
+									disabled={!aRecord && !aaaaRecord && !cnameRecord}
 									isLoading={$launchServer$.isLoading || $createServer$.isLoading}
 									icon={CloudUpload32}
 								>
 									Launch Server
 								</AsyncButton>
 							</div>
-						</FormGroup>
+							</FormGroup
+						>
 					</Form>
 				{/if}
 			</div>

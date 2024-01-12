@@ -74,7 +74,7 @@
 						<div
 							style="display: flex; flex-direction: column; justify-content: flex-start; align-items: flex-start"
 						>
-							<CodeSnippet type="inline" code={row.appId + '.fly.dev'} feedback="Copied to clipboard!" />
+							<CodeSnippet type="inline" code={row.appHostname} feedback="Copied to clipboard!" />
 							{#if row.ipv4Address}
 								<div class="ipv4">
 									<CodeSnippet type="inline" code={row.ipv4Address} feedback="Copied to clipboard!" />

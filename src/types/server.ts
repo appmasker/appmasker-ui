@@ -1,33 +1,35 @@
 import type { ServerTier } from "./products";
 
 export interface Server {
-  id: string;
+	id: string;
 
-  name: string;
+	name: string;
 
-  ipv4Address: string;
+	ipv4Address: string;
 
-  ipv6Address: string;
+	ipv6Address: string;
 
-  regions: FlyRegion[];
+	regions: FlyRegion[];
 
-  configFile: string | Object;
+	configFile: string | Object;
 
-  configType: ServerConfigType
+	configType: ServerConfigType;
 
-  appId: string;
+	appId: string;
 
-  createdDate: Date;
+	appHostname: string;
 
-  app: ServerApp;
+	createdDate: Date;
 
-  tier: ServerTier;
+	app: ServerApp;
 
-  status: ServerStatus;
+	tier: ServerTier;
 
-  error?: string;
+	status: ServerStatus;
 
-  plugins: string[];
+	error?: string;
+
+	plugins: string[];
 }
 
 export enum ServerStatus {

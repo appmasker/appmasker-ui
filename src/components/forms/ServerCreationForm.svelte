@@ -195,7 +195,7 @@
 
 				<div class="caddy-select-container">
 					<Dropdown
-						helperText="Are you using a Caddyfile or a JSON config?"
+						style="width: 150px"
 						disabled={launchReady}
 						bind:selectedIndex={selectedConfigTypeIndex}
 						items={[
@@ -208,6 +208,13 @@
 			</div>
 			{#if data.configType === ServerConfigType.CADDYFILE}
 				<div class="block">
+					<p>
+						You can use <CodeSnippet
+							type="inline"
+							code={`{$FLY_APP_NAME}.fly.dev`}
+							feedback="Copied to clipboard!"
+						/> for your host if you don't have a domain.
+					</p>
 					<TextArea
 						labelText="Caddyfile"
 						disabled={launchReady}
@@ -220,6 +227,11 @@
 				</div>
 			{:else}
 				<div class="block">
+					<p>You can use <CodeSnippet
+						type="inline"
+						code={`{env.FLY_APP_NAME}.fly.dev`}
+						feedback="Copied to clipboard!"
+					/> for your host if you don't have a domain.</p>
 					<TextArea
 						labelText="Caddy JSON Config"
 						disabled={launchReady}
@@ -326,7 +338,7 @@
 								</div>
 								<CodeSnippet
 									type="inline"
-									code={server?.appId + '.fly.dev'}
+									code={server?.appHostname}
 									feedback="Copied to clipboard!"
 								/>
 							</div>

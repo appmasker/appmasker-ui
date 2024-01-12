@@ -53,32 +53,41 @@ export const regionDictToList = (regionDict: Record<FlyRegion, boolean>): FlyReg
   return Object.keys(regionDict).filter((region) => regionDict[region]) as FlyRegion[];
 }
 
-export const caddyFilePlaceholder = `example.com
+export const caddyFilePlaceholder = `{$FLY_APP_NAME}.fly.dev {
+  # Respond "Hello World" to requests on the root path
+  respond / "Hello World" 200
 
-root * /var/www/wordpress
-php_fastcgi unix//run/php/php-version-fpm.sock
-file_server`
+  # Health check endpoint
+  respond /health "Healthy" 200
+}`;
 
-export const caddyJSONConfigPlaceholder = JSON.stringify({
-  "apps": {
-    "http": {
-      "servers": {
-        "srv0": {
-          "listen": [
-            ":443"
-          ],
-          "routes": [
-            {
-              "handle": [
-                {
-                  "body": "Hello, world!",
-                  "handler": "static_response"
-                }
-              ]
-            }
-          ]
-        }
-      }
-    }
-  }
-}, null, 4);
+export const caddyJSONConfigPlaceholder = JSON.stringify(
+	{
+		apps: {
+			http: {
+				servers: {
+					srv0: {
+						listen: [':443'],
+						routes: [
+							{
+								match: [
+									{
+										host: ['{env.FLY_APP_NAME}.fly.dev']
+									}
+								],
+								handle: [
+									{
+										body: 'Hello, world!',
+										handler: 'static_response'
+									}
+								]
+							}
+						]
+					}
+				}
+			}
+		}
+	},
+	null,
+	4
+);

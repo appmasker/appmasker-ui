@@ -22,7 +22,7 @@
 		},
     {
       id: '3',
-      ipAddress: server?.appId + '.fly.dev',
+      ipAddress: server?.appHostname,
       type: 'Hostname'
     }
 	].filter((row) => row.ipAddress)}

@@ -16,6 +16,7 @@
 	import CaddyServerHelp from '../../components/dialogs/CaddyServerHelp.svelte';
 	import ServerStatus from '../../components/indicators/ServerStatus.svelte';
 	import { accountServers$, getServers } from '../../store';
+	import { flyRegionsIndex } from '../../utils/consts';
 
 	onMount(() => {
 		loadServers();
@@ -24,7 +25,7 @@
 	const headers: { key: string; value: string | number }[] = [
 		{ key: 'status', value: 'Status' },
 		{ key: 'name', value: 'Name' },
-		{ key: 'ipAddress', value: 'IP Addresses' },
+		{ key: 'ipAddress', value: 'Public Networking' },
 		{ key: 'regions', value: 'Regions' },
 		{ key: 'createdDate', value: 'Created' },
 		{ key: 'actions', value: '' }
@@ -72,7 +73,8 @@
 					{#if cell.key === 'ipAddress'}
 						<div
 							style="display: flex; flex-direction: column; justify-content: flex-start; align-items: flex-start"
-						>	
+						>
+							<CodeSnippet type="inline" code={row.appId + '.fly.dev'} feedback="Copied to clipboard!" />
 							{#if row.ipv4Address}
 								<div class="ipv4">
 									<CodeSnippet type="inline" code={row.ipv4Address} feedback="Copied to clipboard!" />
@@ -86,7 +88,7 @@
 					{:else if cell.key === 'status'}
 						<ServerStatus server={row} />
 					{:else if cell.key === 'regions'}
-						{cell.value.length}
+						{@html cell.value.map(region => flyRegionsIndex[region]).join('<br>')}
 					{:else if cell.key === 'createdDate'}
 						{formatRelative(new Date(cell.value), new Date())}
 					{:else if cell.key === 'actions'}

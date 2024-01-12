@@ -28,3 +28,8 @@ export const flyRegions: { label: string; id: FlyRegion; selected: boolean }[] =
 	{ id: FlyRegion.TOKYO, label: 'Tokyo, Japan', selected: false },
 	{ id: FlyRegion.TORONTO, label: 'Toronto, California', selected: false },
 ]
+
+export const flyRegionsIndex = flyRegions.reduce((acc, region) => {
+	acc[region.id] = region.label;
+	return acc;
+}, {} as Record<FlyRegion, string>);

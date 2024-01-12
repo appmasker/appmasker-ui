@@ -36,6 +36,7 @@
 	import CaddyPluginForm from './CaddyPluginForm.svelte';
 	import { Server, ServerConfigType, ServerForm, ServerInput, ServerTier } from '../../types';
 	import billingService from '../../services/billing-service';
+	import NetworkingTable from '../tables/NetworkingTable.svelte';
 
 	export let server: Server = null;
 	export let isEdit = false;
@@ -248,38 +249,11 @@
 				</Accordion>
 			</div>
 
-			<h4 class="block">IP Addresses</h4>
+			<h4 class="block">Public Networking</h4>
 
 			{#if isEdit && !launchReady}
 				<div class="block form-medium">
-					<DataTable
-						headers={[
-							{ key: 'ipAddress', value: 'IP Address' },
-							{ key: 'type', value: 'Type' }
-						]}
-						rows={[
-							{
-								id: '1',
-								ipAddress: server?.ipv6Address,
-								type: 'IPv6'
-							},
-							{
-								id: '2',
-								ipAddress: server?.ipv4Address,
-								type: 'IPv4 (shared)'
-							}
-						].filter((row) => row.ipAddress)}
-					>
-						<div slot="cell" let:row let:cell>
-							<span>
-								{#if cell.key === 'ipAddress'}
-									<CodeSnippet type="inline" code={cell.value} feedback="Copied to clipboard!" />
-								{:else}
-									{cell.value}
-								{/if}
-							</span>
-						</div>
-					</DataTable>
+					<NetworkingTable {server} />
 				</div>
 			{/if}
 
@@ -295,7 +269,7 @@
 			{/if}
 
 			<div class="block">
-				{#if launchReady}
+				{#if !launchReady}
 					<AsyncButton
 						on:click={onSubmit}
 						isLoading={isEdit ? $updateServer$.isLoading : $createServer$.isLoading}

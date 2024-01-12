@@ -19,13 +19,15 @@
 		>https://caddyserver.com/download</Link
 	>
 </p>
-<p>
-	<GithubAuth user={$currentUser$?.data} />
-</p>
+{#if !readonly}
+	<p>
+		<GithubAuth user={$currentUser$?.data} />
+	</p>
+{/if}
 {#if readonly}
 	<InlineNotification
 		title=""
-		subtitle="Changing plugins for an existing server will be supported soon!"
+		subtitle="To change your plugins, create a new Caddy instance"
 		kind="warning"
 		hideCloseButton
 	/>

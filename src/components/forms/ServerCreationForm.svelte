@@ -163,14 +163,14 @@
 				</p> -->
 				<div class="form-medium">
 					<MultiSelect
-					required
-					filterable
-					placeholder="Choose regions to deploy to..."
-					titleText=""
-					label="Choose regions to deploy to..."
-					disabled={launchReady}
-					bind:selectedIds={data.regions}
-					items={flyRegions.map(region => ({ id: region.id, text: region.label }))}
+						required
+						filterable
+						placeholder="Choose regions to deploy to..."
+						titleText=""
+						label="Choose regions to deploy to..."
+						disabled={launchReady}
+						bind:selectedIds={data.regions}
+						items={flyRegions.map(region => ({ id: region.id, text: region.label }))}
 					/>
 				</div>
 				{#if isEdit && server?.regions.length !== Object.values(data?.regions).filter(Boolean).length}
@@ -384,6 +384,12 @@
 </section>
 
 <style>
+	.region-title-container {
+		display: flex;
+		align-items: center;
+		justify-content: flex-start;
+	}
+
 	.caddy-select-container {
 		display: flex;
 		gap: 2em;

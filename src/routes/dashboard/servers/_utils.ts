@@ -26,7 +26,7 @@ export const validateForm = (form: ServerForm): { [field: string]: string | null
 export const serverToForm = (server: Server): ServerForm => {
 	if (server) {
 		return {
-			regions: [],
+			regions: server.regions || [],
 			name: server.name ?? '',
 			caddyFileConfig:
 				server.configType === ServerConfigType.CADDYFILE ? (server.configFile as string) : '',

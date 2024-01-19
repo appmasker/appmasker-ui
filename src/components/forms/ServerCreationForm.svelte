@@ -11,19 +11,17 @@
 		InlineNotification,
 		Link,
 		ListItem,
-		SelectableTile,
+		MultiSelect,
 		TextArea,
 		TextInput,
 		UnorderedList
 	} from 'carbon-components-svelte';
 	import CloudUpload32 from 'carbon-icons-svelte/lib/CloudUpload32';
 	import AddAlt32 from 'carbon-icons-svelte/lib/AddAlt32';
-	import { products } from '../../utils/billing';
 	import { createEventDispatcher } from 'svelte';
 	import {
 		caddyFilePlaceholder,
 		caddyJSONConfigPlaceholder,
-		regionDictToList,
 		serverToForm,
 		validateForm
 	} from '../../routes/dashboard/servers/_utils';
@@ -37,6 +35,9 @@
 	import { Server, ServerConfigType, ServerForm, ServerInput, ServerTier } from '../../types';
 	import billingService from '../../services/billing-service';
 	import NetworkingTable from '../tables/NetworkingTable.svelte';
+	import GithubAuth from '../GithubAuth.svelte';
+	import { currentUser$ } from '../../store';
+	import GitDirectorySelector from './GitDirectorySelector.svelte';
 
 	export let server: Server = null;
 	export let isEdit = false;
@@ -71,11 +72,13 @@
 			localStorage.setItem('caddy-form', JSON.stringify(data));
 			dispatch('submit', {
 				name: data.name,
-				regions: regionDictToList(data.regions),
+				regions: data.regions,
 				uriEncodedCaddyfile:
 					data.configType === ServerConfigType.CADDYFILE ? data.caddyFileConfig : undefined,
 				caddyJSONConfig:
-					data.configType === ServerConfigType.JSON ? JSON.parse(data.caddyJSONConfig) : undefined
+					data.configType === ServerConfigType.JSON ? JSON.parse(data.caddyJSONConfig) : undefined,
+				plugins: data.plugins,
+				staticContent: data.staticContent
 			} as ServerInput);
 		}
 	}
@@ -84,6 +87,10 @@
 		dispatch('launch', server);
 	}
 </script>
+
+<section class="block">
+	<GithubAuth user={$currentUser$?.data}/>
+</section>
 
 <section class="block">
 	<Accordion align="start" size="xl">
@@ -95,8 +102,8 @@
 				<UnorderedList>
 					<ListItem
 						>We're currently deploying
-						<Link href="https://github.com/caddyserver/caddy/releases/tag/v2.6.0" target="_blank">
-							Caddy v2.6.0
+						<Link href="https://github.com/caddyserver/caddy/releases/tag/v2.7.6" target="_blank">
+							Caddy v2.7.6
 						</Link>
 					</ListItem>
 
@@ -151,17 +158,20 @@
 						<p>🚀 Choose regions close to your customers for optimal performance!</p>
 					</Tooltip>
 				</div>
-				<p>
+				<!-- <p>
 					Choose which regions to deploy your server (${products[tier].monthlyPrice}/region/month).
-				</p>
-				<div class="region-tile-grid" role="group" aria-label="selectable tiles">
-					{#each flyRegions as region}
-						<SelectableTile
-							disabled={launchReady}
-							bind:selected={data.regions[region.id]}
-							value={region.id}>{region.label}</SelectableTile
-						>
-					{/each}
+				</p> -->
+				<div class="form-medium">
+					<MultiSelect
+					required
+					filterable
+					placeholder="Choose regions to deploy to..."
+					titleText=""
+					label="Choose regions to deploy to..."
+					disabled={launchReady}
+					bind:selectedIds={data.regions}
+					items={flyRegions.map(region => ({ id: region.id, text: region.label }))}
+					/>
 				</div>
 				{#if isEdit && server?.regions.length !== Object.values(data?.regions).filter(Boolean).length}
 					<InlineNotification
@@ -188,6 +198,18 @@
 					month (1 month of total usage is free!)`}
 					/>
 				{/if}
+			</div>
+
+			<div class="block">
+				<div class="checkbox-row">
+					<h4>Static content</h4>
+					<Tooltip>
+						<p>Optionally choose a repo you'd like to deploy with Caddy.</p>
+						<p>In your Caddy config, you can reference this content at the path <code>/static</code>.</p>
+						<p>For example, if your repo has a file <code>/src/images/profile.jpg</code>, your Caddy config would include <code>/static/src/images/profile.jpg</code></p>
+					</Tooltip>
+				</div>
+				<GitDirectorySelector bind:selection={data.staticContent}/>
 			</div>
 
 			<div class="block">
@@ -362,14 +384,6 @@
 </section>
 
 <style>
-	.region-tile-grid {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 0.5em;
-		max-height: 400px;
-		overflow-y: auto;
-	}
-
 	.caddy-select-container {
 		display: flex;
 		gap: 2em;
@@ -377,11 +391,6 @@
 		max-width: 100%;
 	}
 
-	.region-title-container {
-		display: flex;
-		gap: 15px;
-		align-items: center;
-	}
 	.checkbox-row {
 		display: flex;
 		align-items: center;

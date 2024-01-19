@@ -30,8 +30,18 @@ export interface Server {
 	error?: string;
 
 	plugins: string[];
+
+	staticContent: GitRepo;
 }
 
+export interface GitRepo {
+	provider: string;
+	repo: string;
+	owner: string;
+	branch: string;
+	path: string;
+	url: string;
+}
 export enum ServerStatus {
 	PREPARING = 'preparing',
 
@@ -59,13 +69,13 @@ export enum ServerDisplayStatus {
 }
 
 export enum ServerAppState {
-  PENDING = 'PENDING',
-  DEPLOYED = 'DEPLOYED',
-  SUSPENDED = 'SUSPENDED',
-};
+	PENDING = 'PENDING',
+	DEPLOYED = 'DEPLOYED',
+	SUSPENDED = 'SUSPENDED'
+}
 
 export enum ServerAppStatus {
-  RUNNING = 'running'
+	RUNNING = 'running'
 }
 
 export interface ServerApp {
@@ -92,34 +102,37 @@ export interface ServerApp {
 }
 
 export enum ServerConfigType {
-  CADDYFILE = 'caddyfile',
-  JSON = 'json'
+	CADDYFILE = 'caddyfile',
+	JSON = 'json'
 }
 
 export interface ServerForm {
-  regions: Record<FlyRegion, boolean>;
-  name: string;
-  caddyFileConfig: string;
-  caddyJSONConfig: string;
-  configType: ServerConfigType;
-  plugins: string[];
+	regions: FlyRegion[];
+	name: string;
+	caddyFileConfig: string;
+	caddyJSONConfig: string;
+	configType: ServerConfigType;
+	plugins: string[];
+	staticContent: GitRepo;
 }
 
 export interface ServerUpdateInput {
-  id: string;
-  regions?: FlyRegion[];
-  name?: string;
-  uriEncodedCaddyfile?: string;
-  caddyJSONConfig?: Object;
-  plugins: string[];
+	id: string;
+	regions?: FlyRegion[];
+	name?: string;
+	uriEncodedCaddyfile?: string;
+	caddyJSONConfig?: Object;
+	plugins: string[];
+	staticContent: GitRepo;
 }
 
 export interface ServerInput {
-  regions: FlyRegion[];
-  name: string;
-  uriEncodedCaddyfile?: string;
-  caddyJSONConfig?: Object;
-  plugins: [];
+	regions: FlyRegion[];
+	name: string;
+	uriEncodedCaddyfile?: string;
+	caddyJSONConfig?: Object;
+	plugins: string[];
+	staticContent: GitRepo;
 }
 
 export enum FlyRegion {

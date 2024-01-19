@@ -26,8 +26,8 @@ export const flyRegions: { label: string; id: FlyRegion; selected: boolean }[] =
 	{ id: FlyRegion.SUNNYVALE_CA, label: 'Sunnyvale, CA', selected: false },
 	{ id: FlyRegion.SYDNEY, label: 'Sydney, Australia', selected: false },
 	{ id: FlyRegion.TOKYO, label: 'Tokyo, Japan', selected: false },
-	{ id: FlyRegion.TORONTO, label: 'Toronto, California', selected: false },
-]
+	{ id: FlyRegion.TORONTO, label: 'Toronto, Canada', selected: false }
+];
 
 export const flyRegionsIndex = flyRegions.reduce((acc, region) => {
 	acc[region.id] = region.label;

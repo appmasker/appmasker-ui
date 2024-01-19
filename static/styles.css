@@ -77,3 +77,15 @@ code {
   justify-content: flex-end;
   margin-right: 2em;
 }
+
+.form-control-sm {
+  max-width: 300px;
+}
+
+.form-control-md {
+  max-width: 500px;
+}
+
+.form-control-lg {
+  max-width: 650px;
+}

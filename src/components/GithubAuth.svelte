@@ -34,13 +34,12 @@
 <div>
 
   {#if !$credentials$?.data?.length}
-    Connect to private repos by logging in with GitHub:
+    Connect to GitHub to access private repos:
   {:else}
     <div class="block login-success">
       <CheckmarkFilled />
       &nbsp;
-      We can access your private repos!
-      You logged in with GitHub {formatRelative(new Date($credentials$?.data?.[0]?.createdDate), new Date())}
+      You connected to GitHub {formatRelative(new Date($credentials$?.data?.[0]?.createdDate), new Date())}
     </div>
   {/if}
 

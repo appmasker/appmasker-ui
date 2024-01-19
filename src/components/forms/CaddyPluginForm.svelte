@@ -3,8 +3,8 @@
 	import TrashCan16 from 'carbon-icons-svelte/lib/TrashCan16';
 	import Validator from './Validator.svelte';
 	import { goModuleValidator } from '../../utils/validators';
-	import { currentUser$ } from '../../store';
-	import GithubAuth from '../GithubAuth.svelte';
+	import { credentials$ } from '../../store';
+	import CheckmarkFilled from 'carbon-icons-svelte/lib/CheckmarkFilled16';
 
 	export let plugins = [''];
 	export let readonly = false;
@@ -19,9 +19,15 @@
 		>https://caddyserver.com/download</Link
 	>
 </p>
-{#if !readonly}
+{#if $credentials$?.data?.length}
+	<p style="display: flex; align-items: center">
+		<CheckmarkFilled />
+      &nbsp;
+		Private plugin repos are accessible via your Github token.
+	</p>
+{:else}
 	<p>
-		<GithubAuth user={$currentUser$?.data} />
+		You can also use any plugin from Github. Just enter the full path to the plugin, including the version tag.
 	</p>
 {/if}
 {#if readonly}

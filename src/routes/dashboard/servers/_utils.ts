@@ -38,7 +38,8 @@ export const serverToForm = (server: Server): ServerForm => {
 					: '',
 			configType: server.configType,
 			plugins: server.plugins || [],
-			staticContent: server.staticContent
+			staticContent: server.staticContent,
+			variables: server.variables || []
 		};
 	} else {
 		return {
@@ -48,7 +49,8 @@ export const serverToForm = (server: Server): ServerForm => {
 			caddyJSONConfig: '',
 			configType: ServerConfigType.CADDYFILE,
 			plugins: [],
-			staticContent: null
+			staticContent: null,
+			variables: []
 		};
 	}
 };

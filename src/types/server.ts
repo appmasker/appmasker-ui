@@ -32,6 +32,8 @@ export interface Server {
 	plugins: string[];
 
 	staticContent: GitRepo;
+
+	variables: EnvironmentVariable[];
 }
 
 export interface GitRepo {
@@ -106,6 +108,11 @@ export enum ServerConfigType {
 	JSON = 'json'
 }
 
+export type EnvironmentVariable = {
+	key: string;
+	value: string;
+};
+
 export interface ServerForm {
 	regions: FlyRegion[];
 	name: string;
@@ -114,6 +121,7 @@ export interface ServerForm {
 	configType: ServerConfigType;
 	plugins: string[];
 	staticContent: GitRepo;
+	variables: EnvironmentVariable[];
 }
 
 export interface ServerUpdateInput {
@@ -124,6 +132,7 @@ export interface ServerUpdateInput {
 	caddyJSONConfig?: Object;
 	plugins: string[];
 	staticContent: GitRepo;
+	variables: EnvironmentVariable[];
 }
 
 export interface ServerInput {
@@ -133,6 +142,7 @@ export interface ServerInput {
 	caddyJSONConfig?: Object;
 	plugins: string[];
 	staticContent: GitRepo;
+	variables: EnvironmentVariable[];
 }
 
 export enum FlyRegion {

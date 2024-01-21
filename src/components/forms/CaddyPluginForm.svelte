@@ -66,7 +66,7 @@
 	</div>
 {/each}
 
-<div class="block">
+<div class="sub-block">
 	<Button
 		kind="tertiary"
 		size="field"

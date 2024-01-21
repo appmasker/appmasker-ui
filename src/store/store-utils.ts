@@ -19,15 +19,26 @@ export const effectManager = <Entity, Payload = void>(
 			});
 			effect(payload)
 				.then((result) => {
-					store.set({ data: result?.data, isLoading: false, message: result?.message, isError: false, statusCode: 200 });
+					store.set({
+						data: result?.data,
+						isLoading: false,
+						message: result?.message,
+						isError: false,
+						statusCode: 200
+					});
 					afterEffect?.(result, true);
 					cb?.(null);
 					return result;
 				})
 				.catch((error: BackendError) => {
-					console.error(error);
 					console.log('error message', error.message);
-					store.update((state) => ({ ...state, isLoading: false, message: error?.message, isError: true, statusCode: error.statusCode }));
+					store.update((state) => ({
+						...state,
+						isLoading: false,
+						message: error?.message,
+						isError: true,
+						statusCode: error.statusCode
+					}));
 					afterEffect?.(error, false);
 					cb?.(error);
 					return error;

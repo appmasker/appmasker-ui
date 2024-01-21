@@ -8,6 +8,11 @@
   margin-bottom: 1em;
 }
 
+.sub-block {
+  margin-top: 1em;
+  margin-bottom: 0.5em;
+}
+
 .block h4,
 .block p {
   margin-bottom: 0.25em;

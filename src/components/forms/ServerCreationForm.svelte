@@ -38,6 +38,7 @@
 	import GithubAuth from '../GithubAuth.svelte';
 	import { currentUser$ } from '../../store';
 	import GitDirectorySelector from './GitDirectorySelector.svelte';
+	import EnvironmentVariablesForm from './EnvironmentVariablesForm.svelte';
 
 	export let server: Server = null;
 	export let isEdit = false;
@@ -78,7 +79,8 @@
 				caddyJSONConfig:
 					data.configType === ServerConfigType.JSON ? JSON.parse(data.caddyJSONConfig) : undefined,
 				plugins: data.plugins,
-				staticContent: data.staticContent
+				staticContent: data.staticContent,
+				variables: data.variables
 			} as ServerInput);
 		}
 	}
@@ -88,8 +90,18 @@
 	}
 </script>
 
+{#if isEdit}
+	<div class="block">
+		<InlineNotification
+			title="Updating Servers is a WIP"
+			subtitle={`Other than updating the Caddy config which is very fast, other changes to your server are not fully functional yet. Instead, create a new server.`}
+			kind="warning-alt"
+		/>
+	</div>
+{/if}
+
 <section class="block">
-	<GithubAuth user={$currentUser$?.data}/>
+	<GithubAuth user={$currentUser$?.data} />
 </section>
 
 <section class="block">
@@ -170,7 +182,7 @@
 						label="Choose regions to deploy to..."
 						disabled={launchReady}
 						bind:selectedIds={data.regions}
-						items={flyRegions.map(region => ({ id: region.id, text: region.label }))}
+						items={flyRegions.map((region) => ({ id: region.id, text: region.label }))}
 					/>
 				</div>
 				{#if isEdit && server?.regions.length !== Object.values(data?.regions).filter(Boolean).length}
@@ -205,11 +217,26 @@
 					<h4>Static content</h4>
 					<Tooltip>
 						<p>Optionally choose a repo you'd like to deploy with Caddy.</p>
-						<p>In your Caddy config, you can reference this content at the path <code>/static</code>.</p>
-						<p>For example, if your repo has a file <code>/src/images/profile.jpg</code>, your Caddy config would include <code>/static/src/images/profile.jpg</code></p>
+						<p>
+							In your Caddy config, you can reference this content at the path <code>/static</code>.
+						</p>
+						<p>
+							For example, if your repo has a file <code>/src/images/profile.jpg</code>, your Caddy
+							config would include <code>/static/src/images/profile.jpg</code>
+						</p>
 					</Tooltip>
 				</div>
-				<GitDirectorySelector bind:selection={data.staticContent}/>
+				<GitDirectorySelector bind:selection={data.staticContent} />
+			</div>
+
+			<div class="block">
+				<div class="checkbox-row">
+					<h4>Environment Variables</h4>
+					<Tooltip>
+						<p>All environment variables are encrypted when stored in our database.</p>
+					</Tooltip>
+				</div>
+				<EnvironmentVariablesForm existing={isEdit ? data.variables : []} bind:variables={data.variables} />
 			</div>
 
 			<div class="block">
@@ -249,11 +276,13 @@
 				</div>
 			{:else}
 				<div class="block">
-					<p>You can use <CodeSnippet
-						type="inline"
-						code={`{env.FLY_APP_NAME}.fly.dev`}
-						feedback="Copied to clipboard!"
-					/> for your host if you don't have a domain.</p>
+					<p>
+						You can use <CodeSnippet
+							type="inline"
+							code={`{env.FLY_APP_NAME}.fly.dev`}
+							feedback="Copied to clipboard!"
+						/> for your host if you don't have a domain.
+					</p>
 					<TextArea
 						labelText="Caddy JSON Config"
 						disabled={launchReady}
@@ -263,12 +292,6 @@
 						placeholder={caddyJSONConfigPlaceholder}
 						helperText="Paste your Caddy JSON config here"
 					/>
-				</div>
-			{/if}
-
-			{#if $createServer$.isError || $updateServer$.isError}
-				<div class="block">
-					<InlineMessage title="Error" kind="error" state={$createServer$ || $updateServer$} />
 				</div>
 			{/if}
 
@@ -299,6 +322,17 @@
 						kind="warning"
 						hideCloseButton
 					/>
+				</div>
+			{/if}
+
+			{#if !isEdit && $createServer$.isError}
+				<div class="block">
+					<InlineMessage title="Error" kind="error" state={$createServer$} />
+				</div>
+			{/if}
+			{#if isEdit && $updateServer$.isError}
+				<div class="block">
+					<InlineMessage title="Error" kind="error" state={$updateServer$} />
 				</div>
 			{/if}
 
@@ -374,8 +408,7 @@
 									Launch Server
 								</AsyncButton>
 							</div>
-							</FormGroup
-						>
+						</FormGroup>
 					</Form>
 				{/if}
 			</div>

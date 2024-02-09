@@ -13,10 +13,10 @@
 	import Renew from 'carbon-icons-svelte/lib/Renew16';
 	import { formatRelative } from 'date-fns';
 	import { onMount } from 'svelte';
-	import CaddyServerHelp from '../../components/dialogs/CaddyServerHelp.svelte';
-	import ServerStatus from '../../components/indicators/ServerStatus.svelte';
-	import { accountServers$, getServers } from '../../store';
-	import { flyRegionsIndex } from '../../utils/consts';
+	import CaddyServerHelp from '../../../components/dialogs/CaddyServerHelp.svelte';
+	import ServerStatus from '../../../components/indicators/ServerStatus.svelte';
+	import { accountServers$, getServers } from '../../../store';
+	import { flyRegionsIndex } from '../../../utils/consts';
 
 	onMount(() => {
 		loadServers();

@@ -1,8 +1,12 @@
+import { writable } from 'svelte/store';
 import { FlyRegion, Server, ServerConfigType, ServerForm } from '../../../types';
 import { goModuleValidator } from '../../../utils/validators';
 
+export const currentServer = writable<Server | null>(null);
+export const hasAuthenticatedWithDashboard = { value: false };
+
 export const validateForm = (form: ServerForm): { [field: string]: string | null } => {
-	const validation: { [field: string]: string | null } = {};
+	let validation: { [field: string]: string | null } = {};
 
 	if (!form.name) {
 		validation['name'] = 'Give your server a name';
@@ -10,16 +14,25 @@ export const validateForm = (form: ServerForm): { [field: string]: string | null
 	if (!Object.keys(form.regions).some((key) => form.regions[key])) {
 		validation['regions'] = 'Please select at least 1 region';
 	}
+	if (form.plugins.some(goModuleValidator)) {
+		validation['plugins'] = 'Please enter valid Caddy plugin Go module paths, or delete them';
+	}
+
+	validation = { ...validation, ...validateCaddyFileConfig(form) };
+
+	return validation;
+};
+
+export const validateCaddyFileConfig = (
+	form: Partial<ServerForm>
+): { [field: string]: string | null } => {
+	const validation: { [field: string]: string | null } = {};
 	if (form.configType === ServerConfigType.CADDYFILE && !form.caddyFileConfig) {
 		validation['caddyFileConfig'] = 'Please enter a Caddyfile';
 	}
 	if (form.configType === ServerConfigType.JSON && !form.caddyJSONConfig) {
 		validation['caddyJSONConfig'] = 'Please enter a Caddy JSON config';
 	}
-	if (form.plugins.some(goModuleValidator)) {
-		validation['plugins'] = 'Please enter valid Caddy plugin Go module paths, or delete them';
-	}
-
 	return validation;
 };
 
